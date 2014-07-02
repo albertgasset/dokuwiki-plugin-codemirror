@@ -1,0 +1,67 @@
+<?php
+/**
+ * CodeMirror plugin for DokuWiki
+ *
+ * @author Albert Gasset <albertgasset@fsfe.org>
+ * @license GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+ */
+
+if(!defined('DOKU_INC')) die();
+
+require_once DOKU_INC . 'inc/parser/parser.php';
+
+class action_plugin_codemirror extends DokuWiki_Action_Plugin {
+
+    static $actions = array('edit', 'create', 'source', 'preview',
+                            'locked', 'draft', 'recover');
+
+    public function register(Doku_Event_Handler $controller) {
+        $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE',
+                                   $this, 'handle_tpl_metaheader_output');
+    }
+
+    public function handle_tpl_metaheader_output(Doku_Event &$event, $param) {
+        global $ACT, $INFO, $conf;
+
+        if (!in_array($ACT, self::$actions)) {
+            return;
+        }
+
+        $info = $this->getInfo();
+        $version = str_replace('-', '', $info['date']);
+        $base_url = DOKU_BASE . 'lib/plugins/codemirror';
+        $geshi = new GeSHi('', '', DOKU_INC . 'inc/geshi');
+        $mode_acronym = new Doku_Parser_Mode_acronym(array_keys(getAcronyms()));
+
+        $jsinfo = array(
+            'acronyms' => $mode_acronym->acronyms,
+            'baseURL' => $base_url,
+            'camelcase' => (bool) $conf['camelcase'],
+            'entities' => array_keys(getEntities()),
+            'iconURL' => "$base_url/settings.png",
+            'languages' => $geshi->get_supported_languages(),
+            'mathjax' => !plugin_isdisabled('mathjax'),
+            'schemes' => array_values(getSchemes()),
+            'smileys' => array_keys(getSmileys()),
+            'version' => $version,
+        );
+
+        $event->data['link'][] = array(
+            'rel' => 'stylesheet',
+            'type' => 'text/css',
+            'href' => "$base_url/dist/styles.min.css?v=$version",
+        );
+
+        $event->data['script'][] = array(
+            'type' => 'text/javascript',
+            'charset' => 'utf-8',
+            '_data' => 'JSINFO.plugin_codemirror = ' . json_encode($jsinfo),
+        );
+
+        $event->data['script'][] = array(
+            'type' => 'text/javascript',
+            'charset' => 'utf-8',
+            'src' => "$base_url/dist/scripts.min.js?v=$version",
+        );
+    }
+}

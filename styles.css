@@ -1,0 +1,59 @@
+.picker, .tools {
+    z-index: 1000;
+}
+
+.CodeMirror {
+    font-size: 14px;
+    margin-bottom: 7px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+
+.CodeMirror pre {
+    border: none !important;
+    box-shadow: none !important;
+    line-height: 1.25;
+    padding-left: 7px;
+}
+
+.cm-settings-button {
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+#size__ctl > .cm-settings-button {
+    margin-left: 0;
+}
+
+.cm-settings-menu {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    font-size: 1em;
+}
+
+.cm-settings-menu .ui-menu {
+    z-index: 1001;
+}
+
+.cm-settings-menu .ui-icon {
+    margin-top: 0.2em;
+    top: 0.05em;
+}
+
+.cm-settings-menu .ui-menu-item a {
+    cursor: pointer;
+    padding-left: 1.5em;
+}
+
+.cm-settings-menu .ui-icon-check {
+    display: none;
+}
+
+.cm-settings-menu .ui-menu-item.enabled .ui-icon-check {
+    display: inline;
+}
+
+.cm-underline {
+    text-decoration: underline;
+}
