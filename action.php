@@ -3,7 +3,7 @@
  * CodeMirror plugin for DokuWiki
  *
  * @author Albert Gasset <albertgasset@fsfe.org>
- * @license GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+ * @license GNU GPL version 2 or later
  */
 
 if(!defined('DOKU_INC')) die();
