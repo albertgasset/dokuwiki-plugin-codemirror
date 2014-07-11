@@ -96,6 +96,18 @@ jQuery(function() {
         var cm = CodeMirror.fromTextArea(textarea.get(0), {mode: 'null'});
         cm.setOption('lineWrapping', textarea.prop('wrap') !== 'off');
         cm.setOption('readOnly', textarea.prop('readonly'));
+        cm.setOption('tabSize', 2);
+        cm.setOption('extraKeys', {
+            'Enter': function(cm) {
+                return indentCommand(cm, 'Enter');
+            },
+            'Space': function(cm) {
+                return indentCommand(cm, 'Space');
+            },
+            'Backspace' : function(cm) {
+                return indentCommand(cm, 'Backspace');
+            },
+        });
         return cm;
     }
 
@@ -361,6 +373,46 @@ jQuery(function() {
             .on('load', callback);
 
         loadedThemes[name] = true;
+    }
+
+    function indentCommand(cm, key) {
+        var doc = cm.getDoc();
+        if (doc.somethingSelected()) {
+            return CodeMirror.Pass;
+        }
+        var pos = doc.getCursor();
+        if (cm.getModeAt(pos) !== doc.getMode()) {
+            // Cursor on inner mode
+            return CodeMirror.Pass;
+        }
+        var line = doc.getLine(pos.line);
+        var before = line.slice(0, pos.ch);
+        var match = before.match(/^(  +)([-*] ?)?/);
+        if (!match) {
+            return CodeMirror.Pass;
+        }
+        if (key !== 'Enter' && pos.ch > match[0].length) {
+            // Space and Backspace only work before content
+            return CodeMirror.Pass;
+        }
+        if (key === 'Enter') {
+            if (match[2] && match[0] === line) {
+                // List item is empty, cancel list
+                doc.replaceRange('\n',  {line: pos.line, ch: 0}, pos);
+            } else {
+                doc.replaceRange('\n' + match[0], pos);
+            }
+        } else if (key === 'Space') {
+            doc.replaceRange('  ' + before, {line: pos.line, ch: 0}, pos);
+        } else if (key === 'Backspace') {
+            if (match[1].length >= 4) {
+                before = before.slice(2);
+            } else {
+                // Cancel list or preformatted block
+                before = '';
+            }
+            doc.replaceRange(before, {line: pos.line, ch: 0}, pos);
+        }
     }
 
     function url(path) {
