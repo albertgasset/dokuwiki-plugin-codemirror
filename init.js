@@ -138,8 +138,8 @@ jQuery(function() {
             sizeCtl: dw_editor.sizeCtl,
             currentHeadlineLevel: window.currentHeadlineLevel,
             selection_class: window.selection_class,
-            DWgetSelection: window.DWgetSelection,
-            DWsetSelection: window.DWsetSelection,
+            DWgetSelection: window.DWgetSelection || window.getSelection,
+            DWsetSelection: window.DWsetSelection || window.setSelection,
             pasteText: window.pasteText,
         };
 
@@ -178,7 +178,7 @@ jQuery(function() {
             };
         };
 
-        window.DWgetSelection = function(editor) {
+        window.DWgetSelection = window.getSelection = function(editor) {
             if (textarea.is(editor)) {
                 var selection = new window.selection_class();
                 selection.obj = editor;
@@ -188,18 +188,18 @@ jQuery(function() {
                 textarea.val(doc.getValue());
                 return selection;
             } else {
-                return window.DWgetSelection(editor);
+                return dw.DWgetSelection(editor);
             }
         };
 
-        window.DWsetSelection = function(selection) {
+        window.DWsetSelection = window.setSelection = function(selection) {
             if (textarea.is(selection.obj)) {
                 var anchor = doc.posFromIndex(selection.start);
                 var head = doc.posFromIndex(selection.end);
                 doc.setSelection(anchor, head);
                 cm.focus();
             } else {
-                window.DWsetSelection(selection);
+                dw.DWsetSelection(selection);
             }
         };
 
