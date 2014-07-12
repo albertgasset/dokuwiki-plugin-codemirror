@@ -1,19 +1,39 @@
-module.exports = function(grunt) {
-    'use strict';
+/* jshint node: true */
+'use strict';
 
+module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['dist']);
+    grunt.registerTask('default', ['jshint', 'clean', 'cssmin', 'uglify']);
     grunt.registerTask('dev', ['clean', 'cssmin', 'uglify', 'watch']);
-    grunt.registerTask('dist', ['jshint', 'clean', 'cssmin', 'uglify']);
+    grunt.registerTask('dist', [ 'default', 'compress']);
 
     grunt.initConfig({
         clean: {
             dist: ['dist'],
+        },
+        compress: {
+            dist: {
+                options: {
+                    archive: 'dokuwiki-plugin-codemirror.tar.gz',
+                },
+                src: [
+                    'LICENSE',
+                    'README',
+                    'action.php',
+                    'dist/**/*.css',
+                    'dist/**/*.js',
+                    'lang/**/*.php',
+                    'plugin.info.txt',
+                    'settings.png',
+                ],
+                dest: 'codemirror/',
+            },
         },
         cssmin: {
             styles: {
