@@ -108,6 +108,7 @@ jQuery(function() {
                 return indentCommand(cm, 'Backspace');
             },
         });
+        cm.setSize(null, textarea.css('height'));
         return cm;
     }
 
