@@ -388,7 +388,7 @@ jQuery(function() {
         }
         var line = doc.getLine(pos.line);
         var before = line.slice(0, pos.ch);
-        var match = before.match(/^(  +)([-*] ?)?/);
+        var match = before.match(/^(  +)([-*] )?/);
         if (!match) {
             return CodeMirror.Pass;
         }
