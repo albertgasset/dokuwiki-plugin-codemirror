@@ -83,7 +83,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
 
             style = dokuToken(stream, state);
 
-            if (!stream.current()) {
+            if (!stream.current() && !state.exit) {
                 // No pattern matched
                 if (state.innerMode) {
                     style = state.innerMode.token(stream, state.innerState);
