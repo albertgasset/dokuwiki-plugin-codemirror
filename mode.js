@@ -151,6 +151,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         jsp: {name: 'htmlembedded', mime: 'application/x-jsp',
               deps: ['clike']},
         julia: {name: 'julia'},
+        kotlin: {name: 'kotlin'},
         latex: {name: 'stex'},
         less: {name: 'css', mime: 'text/x-less'},
         lisp: {name: 'commonlisp'},
