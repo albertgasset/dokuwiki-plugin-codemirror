@@ -528,8 +528,6 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         style: 'link',
     });
 
-    addMissingInnerModes(parserConfig.languages);
-
     connectDokuModes();
 
     return mode;
@@ -715,16 +713,6 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         }
 
         return styles.join(' ') || null;
-    }
-
-    function addMissingInnerModes(languages) {
-        // No CodeMirror mode available for these languages
-        for (var i = 0; i < languages.length; i += 1) {
-            var lang = languages[i];
-            if (!innerModes[lang]) {
-                innerModes[lang] = {name: 'null'};
-            }
-        }
     }
 
     function connectDokuModes() {

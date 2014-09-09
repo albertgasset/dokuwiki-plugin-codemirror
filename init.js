@@ -119,7 +119,7 @@ jQuery(function() {
 
         mode.name = 'doku';
         mode.loadMode = function(mode) {
-            mode = mode || {name: 'null'};
+            mode = mode || {name: 'doku-null'};
             if (mode.deps)  {
                 for (var i = 0; i < mode.deps.length; i += 1) {
                     CodeMirror.autoLoadMode(cm, mode.deps[i]);
@@ -128,6 +128,14 @@ jQuery(function() {
             CodeMirror.autoLoadMode(cm, mode.name);
             return CodeMirror.getMode(cm.options, mode.mime || mode.name);
         };
+
+        CodeMirror.defineMode('doku-null', function() {
+            return {
+                token: function(stream) {
+                    stream.next();
+                }
+            };
+        });
 
         return mode;
     }
