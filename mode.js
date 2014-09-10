@@ -189,6 +189,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         scheme: {name: 'scheme'},
         scss: {name: 'css', mime: 'text/x-scss'},
         sieve: {name: 'sieve'},
+        slim: {name: 'slim'},
         smalltalk: {name: 'smalltalk'},
         smarty: {name: 'smarty'},
         solr: {name: 'solr'},
