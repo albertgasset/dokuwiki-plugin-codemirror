@@ -4,13 +4,13 @@
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-compress');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['jshint', 'clean', 'cssmin', 'uglify']);
-    grunt.registerTask('dev', ['clean', 'cssmin', 'uglify', 'watch']);
+    grunt.registerTask('default', ['jshint', 'clean', 'less', 'uglify']);
+    grunt.registerTask('dev', ['clean', 'less', 'uglify', 'watch']);
     grunt.registerTask('dist', [ 'default', 'compress']);
 
     grunt.initConfig({
@@ -35,14 +35,13 @@ module.exports = function(grunt) {
                 dest: 'codemirror/',
             },
         },
-        cssmin: {
+        less: {
+            options: {
+                compress: true,
+            },
             styles: {
                 dest: 'dist/styles.min.css',
-                src: [
-                    'codemirror/lib/codemirror.css',
-                    'codemirror/addon/dialog/dialog.css',
-                    'styles.css',
-                ],
+                src: 'styles.less',
             },
             themes: {
                 files: [{
@@ -116,13 +115,9 @@ module.exports = function(grunt) {
                 files: '<%= uglify.scripts.src %>',
                 tasks: ['uglify:scripts'],
             },
-            styles: {
-                files: '<%= cssmin.styles.src %>',
-                tasks: ['cssmin:styles'],
-            },
-            themes: {
-                files: 'codemirror/theme/*.css',
-                tasks: ['cssmin:themes'],
+            less: {
+                files: ['<%= less.styles.src %>', 'codemirror/**/*.css'],
+                tasks: ['less'],
             },
         },
     });
