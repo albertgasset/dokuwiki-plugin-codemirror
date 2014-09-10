@@ -1,22 +1,24 @@
-@import (less) "codemirror/lib/codemirror.css";
-@import (less) "codemirror/addon/dialog/dialog.css";
+form#dw__editform {
+    @import (less) "codemirror/lib/codemirror.css";
+    @import (less) "codemirror/addon/dialog/dialog.css";
+
+    .CodeMirror {
+        font-size: 14px;
+        margin-bottom: 7px;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+    }
+
+    .CodeMirror pre {
+        border: none;
+        box-shadow: none;
+        line-height: 1.25;
+        padding-left: 7px;
+    }
+}
 
 .picker, .tools {
     z-index: 1000;
-}
-
-.CodeMirror {
-    font-size: 14px;
-    margin-bottom: 7px;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-}
-
-.CodeMirror pre {
-    border: none !important;
-    box-shadow: none !important;
-    line-height: 1.25;
-    padding-left: 7px;
 }
 
 .cm-settings-button {
