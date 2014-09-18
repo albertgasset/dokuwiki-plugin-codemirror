@@ -43,15 +43,6 @@ module.exports = function(grunt) {
                 dest: 'dist/styles.min.css',
                 src: 'styles.less',
             },
-            themes: {
-                files: [{
-                    expand: true,
-                    cwd: 'codemirror/theme',
-                    src: '*.css',
-                    dest: 'dist/themes',
-                    ext: '.min.css',
-                }],
-            },
         },
         jshint: {
             options: {

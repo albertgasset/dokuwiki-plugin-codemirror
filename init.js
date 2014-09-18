@@ -10,7 +10,6 @@
 jQuery(function() {
     'use strict';
 
-    var loadedThemes = {'default': true};
     var textarea = jQuery('#wiki__text');
 
     if (!textarea.length) {
@@ -34,10 +33,8 @@ jQuery(function() {
             'solarized', 'the-matrix', 'tomorrow-night-eighties', 'twilight',
             'vibrant-ink', 'xq-dark', 'xq-light',
         ],
-        callback: function(value, init) {
-            requireTheme(value, init, function() {
-                cm.setOption('theme', value);
-            });
+        callback: function(value) {
+            cm.setOption('theme', value);
         },
     }, {
         name: 'fontsize',
@@ -285,7 +282,7 @@ jQuery(function() {
             }
 
             callback[s.name] = s.callback;
-            s.callback(value, true);
+            s.callback(value);
         }
 
         menu.menu({position: {my: 'right top', at: 'left top'}});
@@ -367,21 +364,6 @@ jQuery(function() {
         }
 
         var intervalID = setInterval(check, 200);
-    }
-
-    function requireTheme(name, init, callback) {
-        if (loadedThemes[name]) {
-            callback();
-            return;
-        }
-
-        jQuery('<link>')
-            .attr('rel', 'stylesheet')
-            .attr('href', url('/dist/themes/' + name + '.min.css'))
-            .appendTo('head')
-            .on('load', callback);
-
-        loadedThemes[name] = true;
     }
 
     function indentCommand(cm, key) {
