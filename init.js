@@ -93,7 +93,7 @@ jQuery(function() {
         var cm = CodeMirror.fromTextArea(textarea.get(0), {mode: 'null'});
         cm.setOption('lineWrapping', textarea.prop('wrap') !== 'off');
         cm.setOption('readOnly', textarea.prop('readonly'));
-        cm.setOption('tabSize', 2);
+        cm.setOption('tabSize', 8);
         cm.setOption('extraKeys', {
             'Enter': function(cm) {
                 return indentCommand(cm, 'Enter');
