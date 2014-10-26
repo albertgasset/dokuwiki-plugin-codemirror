@@ -70,7 +70,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: 'codemirror/mode',
-                    src: ['*/*.js', '!*/test.js'],
+                    src: ['*/*.js', '!*/*test.js'],
                     dest: 'dist/modes',
                     ext: '.min.js',
                     flatten: true,
