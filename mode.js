@@ -391,7 +391,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         ],
     }];
 
-    if (parserConfig.smileys) {
+    if (parserConfig.smileys.length > 0) {
         dokuModes.push({
             name: 'smiley', // 230
             type: 'substition',
@@ -403,8 +403,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
             style: 'keyword',
         });
     }
-
-    if (parserConfig.acronyms) {
+    if (parserConfig.acronyms.length > 0) {
         dokuModes.push({
             name: 'acronym', // 240
             type: 'substition',
@@ -417,7 +416,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         });
     }
 
-    if (parserConfig.entities) {
+    if (parserConfig.entities.length > 0) {
         dokuModes.push({
             name: 'entity', // 260
             type: 'substition',
