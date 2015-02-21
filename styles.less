@@ -1,6 +1,8 @@
 form#dw__editform {
     @import (less) "codemirror/lib/codemirror.css";
     @import (less) "codemirror/addon/dialog/dialog.css";
+    @import (less) "codemirror/addon/search/matchesonscrollbar.css";
+    @import (less) "codemirror/addon/scroll/simplescrollbars.css";
 
     @import (less) "codemirror/theme/3024-day.css";
     @import (less) "codemirror/theme/3024-night.css";
@@ -27,11 +29,13 @@ form#dw__editform {
     @import (less) "codemirror/theme/rubyblue.css";
     @import (less) "codemirror/theme/solarized.css";
     @import (less) "codemirror/theme/the-matrix.css";
+    @import (less) "codemirror/theme/tomorrow-night-bright.css";
     @import (less) "codemirror/theme/tomorrow-night-eighties.css";
     @import (less) "codemirror/theme/twilight.css";
     @import (less) "codemirror/theme/vibrant-ink.css";
     @import (less) "codemirror/theme/xq-dark.css";
     @import (less) "codemirror/theme/xq-light.css";
+    @import (less) "codemirror/theme/zenburn.css";
 
     .CodeMirror {
         font-size: 14px;
@@ -46,6 +50,10 @@ form#dw__editform {
         box-shadow: none;
         line-height: 1.25;
         padding-left: 7px;
+    }
+
+    .CodeMirror-scrollbar-filler {
+        background: transparent;
     }
 }
 

@@ -30,8 +30,9 @@ jQuery(function() {
             'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo',
             'mdn-like', 'midnight', 'monokai', 'neat', 'neo', 'night',
             'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue',
-            'solarized', 'the-matrix', 'tomorrow-night-eighties', 'twilight',
-            'vibrant-ink', 'xq-dark', 'xq-light',
+            'solarized', 'the-matrix', 'tomorrow-night-bright',
+            'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark',
+            'xq-light', 'zenburn',
         ],
         callback: function(value) {
             cm.setOption('theme', value);
@@ -105,6 +106,7 @@ jQuery(function() {
                 return indentCommand(cm, 'Backspace');
             },
         });
+        cm.setOption('scrollbarStyle', 'overlay');
         cm.setSize(null, textarea.css('height'));
         return cm;
     }
