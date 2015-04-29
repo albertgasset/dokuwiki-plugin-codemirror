@@ -186,7 +186,7 @@ jQuery(function() {
             };
         };
 
-        window.DWgetSelection = window.getSelection = function(editor) {
+        window.DWgetSelection = function(editor) {
             if (textarea.is(editor)) {
                 var selection = new window.selection_class();
                 selection.obj = editor;
@@ -200,7 +200,7 @@ jQuery(function() {
             }
         };
 
-        window.DWsetSelection = window.setSelection = function(selection) {
+        window.DWsetSelection = function(selection) {
             if (textarea.is(selection.obj)) {
                 var anchor = doc.posFromIndex(selection.start);
                 var head = doc.posFromIndex(selection.end);
