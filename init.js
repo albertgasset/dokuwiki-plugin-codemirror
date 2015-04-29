@@ -118,14 +118,20 @@ jQuery(function() {
 
         mode.name = 'doku';
         mode.loadMode = function(mode) {
-            mode = mode || {name: 'doku-null'};
-            if (mode.deps)  {
-                for (var i = 0; i < mode.deps.length; i += 1) {
-                    CodeMirror.autoLoadMode(cm, mode.deps[i]);
-                }
+            var spec = {};
+            if (mode) {
+                spec.name = mode.mime || mode.name;
+                jQuery.each(mode.options || [], function(key, value) {
+                    spec[key] = value;
+                });
+                jQuery.each(mode.deps || [], function(index, name) {
+                    CodeMirror.autoLoadMode(cm, name);
+                });
+                CodeMirror.autoLoadMode(cm, mode.name);
+            } else {
+                spec.name = 'doku-null';
             }
-            CodeMirror.autoLoadMode(cm, mode.name);
-            return CodeMirror.getMode(cm.options, mode.mime || mode.name);
+            return CodeMirror.getMode(cm.options, spec);
         };
 
         CodeMirror.defineMode('doku-null', function() {
