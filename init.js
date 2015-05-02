@@ -74,6 +74,16 @@ jQuery(function() {
                 }
             }
         },
+        nativeeditor: {
+            default_: '0',
+            callback: function(value) {
+                if (!cm && value === '0') {
+                    initCodeMirror();
+                } else if (cm && value === '1') {
+                    destroyCodeMirror();
+                }
+            }
+        },
         syntax: {
             default_: '1',
             callback: function(value) {
@@ -105,9 +115,21 @@ jQuery(function() {
     initMode();
     initHooks();
     initSettingsMenu();
-    initCodeMirror();
+
+    if (getSetting('nativeeditor') === '0') {
+        initCodeMirror();
+    }
+
+    function destroyCodeMirror() {
+        var selection = window.DWgetSelection(textarea.get(0));
+        cm.toTextArea();
+        cm = null;
+        window.DWsetSelection(selection);
+        textarea.focus();
+    }
 
     function initCodeMirror() {
+        var selection = window.DWgetSelection(textarea.get(0));
         cm = CodeMirror.fromTextArea(textarea.get(0), {mode: 'null'});
         cm.setOption('lineWrapping', textarea.prop('wrap') !== 'off');
         cm.setOption('readOnly', textarea.prop('readonly'));
@@ -126,9 +148,12 @@ jQuery(function() {
         cm.setOption('scrollbarStyle', 'overlay');
         cm.setSize(null, textarea.css('height'));
         jQuery.each(settings, function(name, setting) {
-            var value = getSetting(name);
-            setting.callback(value);
+            if (name !== 'nativeeditor') {
+                var value = getSetting(name);
+                setting.callback(value);
+            }
         });
+        window.DWsetSelection(selection);
     }
 
     function initMode() {
@@ -285,6 +310,8 @@ jQuery(function() {
             'activeline',
             'matchbrackets',
             'syntax',
+            '-',
+            'nativeeditor',
         ];
 
         jQuery.each(items, function(index, name) {
@@ -300,6 +327,7 @@ jQuery(function() {
             var item = jQuery('<li>');
             var link = jQuery('<a>').html(title);
             var value = getSetting(name);
+            var disabled = getSetting('nativeeditor') === '1';
 
             if (setting.choices) {
                 // Choice setting
@@ -330,6 +358,10 @@ jQuery(function() {
                     icon.addClass('ui-icon-blank');
                 }
                 link.append(icon);
+            }
+
+            if (disabled && name !== 'nativeeditor') {
+                item.addClass('ui-state-disabled');
             }
 
             item.append(link);
@@ -371,6 +403,14 @@ jQuery(function() {
                     icon.addClass('ui-icon-check');
                 } else {
                     icon.addClass('ui-icon-blank');
+                }
+            }
+
+            if (name === 'nativeeditor') {
+                if (value === '1') {
+                    ui.item.siblings().addClass('ui-state-disabled');
+                } else {
+                    ui.item.siblings().removeClass('ui-state-disabled');
                 }
             }
 
