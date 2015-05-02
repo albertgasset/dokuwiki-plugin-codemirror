@@ -56,8 +56,6 @@ jQuery(function() {
             });
         },
     }, {
-        name: '-',
-    }, {
         name: 'closebrackets',
         default_: '0',
         callback: function(value) {
@@ -254,44 +252,58 @@ jQuery(function() {
     }
 
     function initSettingsMenu(settings) {
-        var menu = jQuery('<ul>').attr('class', 'cm-settings-menu');
-        var check = '<span class="ui-icon ui-icon-check"></span>';
+        var menu = jQuery('<ul>').addClass('cm-settings-menu');
         var callback = {};
 
-        for (var i = 0; i < settings.length; i += 1) {
-            var s = settings[i];
-            var title = LANG.plugins.codemirror['setting_' + s.name];
+        jQuery.each(settings, function(index, setting) {
+            var title = LANG.plugins.codemirror['setting_' + setting.name];
 
             // Separator
-            if (s.name === '-') {
+            if (setting.name === '-') {
                 menu.append('<li>-</li>');
-                continue;
+                return;
             }
 
-            var value = getSetting(s.name, s.default_);
+            var item = jQuery('<li>');
+            var link = jQuery('<a>').html(title);
+            var value = getSetting(setting.name, setting.default_);
 
-            if (s.choices) {
+            if (setting.choices) {
                 // Choice setting
-                var item = jQuery('<li><a>' + title + '</a></li>');
-                var submenu = jQuery('<ul>').appendTo(item);
-                for (var j = 0; j < s.choices.length; j += 1) {
-                    var c = s.choices[j];
-                    submenu.append('<li data-setting="' + s.name + '" ' +
-                                   'data-choice="' + c + '" ' +
-                                   (value === c ? 'class="enabled"' : '') +
-                                   '><a>' + check + c + '</a></li>');
-                }
-                menu.append(item);
+                var submenu = jQuery('<ul>');
+                jQuery.each(setting.choices, function(index, choice) {
+                    var item = jQuery('<li>');
+                    item.data('setting', setting.name);
+                    item.data('choice', choice);
+                    var link = jQuery('<a>').html(choice);
+                    var icon = jQuery('<span>').addClass('ui-icon');
+                    if (value === choice) {
+                        icon.addClass('ui-icon-check');
+                    } else {
+                        icon.addClass('ui-icon-blank');
+                    }
+                    link.append(icon);
+                    item.append(link);
+                    submenu.append(item);
+                });
+                item.append(submenu);
             } else {
                 // Boolean setting
-                menu.append('<li data-setting="' + s.name + '" ' +
-                            (value === '1' ? 'class="enabled"' : '') +
-                            '><a>' + check + title + '</a></li>');
+                item.data('setting', setting.name);
+                var icon = jQuery('<span>').addClass('ui-icon');
+                if (value === '1') {
+                    icon.addClass('ui-icon-check');
+                } else {
+                    icon.addClass('ui-icon-blank');
+                }
+                link.append(icon);
             }
 
-            callback[s.name] = s.callback;
-            s.callback(value);
-        }
+            item.append(link);
+            menu.append(item);
+            callback[setting.name] = setting.callback;
+            setting.callback(value);
+        });
 
         menu.menu({position: {my: 'right top', at: 'left top'}});
 
@@ -306,6 +318,7 @@ jQuery(function() {
         menu.on('menuselect', function(event, ui) {
             var name = ui.item.data('setting');
             var value = ui.item.data('choice');
+            var icon = ui.item.find('.ui-icon');
 
             if (!name) {
                 // Submenu, do nothing and prevent hiding
@@ -314,12 +327,20 @@ jQuery(function() {
 
             if (value) {
                 // Choice setting
-                ui.item.siblings().removeClass('enabled');
-                ui.item.addClass('enabled');
+                var icons = ui.item.siblings().find('.ui-icon');
+                icons.removeClass('ui-icon-check');
+                icons.addClass('ui-icon-blank');
+                icon.removeClass('ui-icon-blank');
+                icon.addClass('ui-icon-check');
             } else {
                 // Boolean setting
                 value = getSetting(name) === '1' ? '0' : '1';
-                ui.item.toggleClass('enabled');
+                icon.removeClass('ui-icon-blank ui-icon-check');
+                if (value === '1') {
+                    icon.addClass('ui-icon-check');
+                } else {
+                    icon.addClass('ui-icon-blank');
+                }
             }
 
             setSetting(name, value);
