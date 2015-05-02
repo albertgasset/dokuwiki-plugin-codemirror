@@ -16,80 +16,99 @@ jQuery(function() {
         return;
     }
 
-    var cm = initCodeMirror();
-    var mode = initMode(cm);
+    var cm, mode;
 
-    initHooks(cm);
+    var settings = {
+        activeline: {
+            default_: '0',
+            callback: function(value) {
+                if (cm) {
+                    cm.setOption('styleActiveLine', value === '1');
+                }
+            }
+        },
+        closebrackets: {
+            default_: '0',
+            callback: function(value) {
+                if (cm) {
+                    cm.setOption('autoCloseBrackets', value === '1');
+                }
+            }
+        },
+        fontsize: {
+            default_: '14',
+            choices: ['10', '11',  '12', '13', '14', '16', '18', '20', '24'],
+            callback: function(value) {
+                if (cm) {
+                    var wrapper = cm.getWrapperElement();
+                    jQuery(wrapper).css('font-size', value + 'px');
+                    cm.refresh();
+                }
+            }
+        },
+        keymap: {
+            default_: 'default',
+            choices: ['default', 'emacs', 'sublime', 'vim'],
+            callback: function(value) {
+                if (cm) {
+                    requireKeyMap(value, function() {
+                        cm.setOption('vimMode', value === 'vim');
+                        cm.setOption('keyMap', value);
+                    });
+                }
+            }
+        },
+        linenumbers: {
+            default_: '0',
+            callback: function(value) {
+                if (cm) {
+                    cm.setOption('lineNumbers', value === '1');
+                }
+            }
+        },
+        matchbrackets: {
+            default_: '1',
+            callback: function(value) {
+                if (cm) {
+                    cm.setOption('matchBrackets', value === '1');
+                }
+            }
+        },
+        syntax: {
+            default_: '1',
+            callback: function(value) {
+                if (cm) {
+                    cm.setOption('mode', value === '1' ? mode : 'null');
+                }
+            }
+        },
+        theme: {
+            default_: 'default',
+            choices: [
+                '3024-day', '3024-night', 'ambiance', 'ambiance-mobile',
+                'base16-dark', 'base16-light', 'blackboard', 'cobalt',
+                'default', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark',
+                'mbo', 'mdn-like', 'midnight', 'monokai', 'neat', 'neo',
+                'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark',
+                'rubyblue', 'solarized', 'the-matrix', 'tomorrow-night-bright',
+                'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark',
+                'xq-light', 'zenburn',
+            ],
+            callback: function(value) {
+                if (cm) {
+                    cm.setOption('theme', value);
+                }
+            }
+        },
+    };
 
-    initSettingsMenu([{
-        name: 'theme',
-        default_: 'default',
-        choices: [
-            '3024-day', '3024-night', 'ambiance', 'ambiance-mobile',
-            'base16-dark', 'base16-light', 'blackboard', 'cobalt', 'default',
-            'eclipse', 'elegant', 'erlang-dark', 'lesser-dark', 'mbo',
-            'mdn-like', 'midnight', 'monokai', 'neat', 'neo', 'night',
-            'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'rubyblue',
-            'solarized', 'the-matrix', 'tomorrow-night-bright',
-            'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark',
-            'xq-light', 'zenburn',
-        ],
-        callback: function(value) {
-            cm.setOption('theme', value);
-        },
-    }, {
-        name: 'fontsize',
-        default_: '14',
-        choices: ['10', '11',  '12', '13', '14', '16', '18', '20', '24'],
-        callback: function(value) {
-            jQuery(cm.getWrapperElement()).css('font-size', value + 'px');
-            cm.refresh();
-        },
-    }, {
-        name: 'keymap',
-        default_: 'default',
-        choices: ['default', 'emacs', 'sublime', 'vim'],
-        callback: function(value) {
-            requireKeyMap(value, function() {
-                cm.setOption('vimMode', value === 'vim');
-                cm.setOption('keyMap', value);
-            });
-        },
-    }, {
-        name: 'closebrackets',
-        default_: '0',
-        callback: function(value) {
-            cm.setOption('autoCloseBrackets', value === '1');
-        },
-    }, {
-        name: 'linenumbers',
-        default_: '0',
-        callback: function(value) {
-            cm.setOption('lineNumbers', value === '1');
-        },
-    }, {
-        name: 'activeline',
-        default_: '0',
-        callback: function(value) {
-            cm.setOption('styleActiveLine', value === '1');
-        },
-    }, {
-        name: 'matchbrackets',
-        default_: '1',
-        callback: function(value) {
-            cm.setOption('matchBrackets', value === '1');
-        },
-    }, {
-        name: 'syntax',
-        default_: '1',
-        callback: function(value) {
-            cm.setOption('mode', value === '1' ? mode : 'null');
-        },
-    }]);
-
+    initMode();
+    initHooks();
+    initSettingsMenu();
+    initCodeMirror();
 
     function initCodeMirror() {
-        var cm = CodeMirror.fromTextArea(textarea.get(0), {mode: 'null'});
+        cm = CodeMirror.fromTextArea(textarea.get(0), {mode: 'null'});
         cm.setOption('lineWrapping', textarea.prop('wrap') !== 'off');
         cm.setOption('readOnly', textarea.prop('readonly'));
         cm.setOption('tabSize', 8);
@@ -106,11 +125,14 @@ jQuery(function() {
         });
         cm.setOption('scrollbarStyle', 'overlay');
         cm.setSize(null, textarea.css('height'));
-        return cm;
+        jQuery.each(settings, function(name, setting) {
+            var value = getSetting(name);
+            setting.callback(value);
+        });
     }
 
-    function initMode(cm) {
-        var mode = JSINFO.plugin_codemirror;
+    function initMode() {
+        mode = JSINFO.plugin_codemirror;
 
         CodeMirror.modeURL = url('/dist/modes/%N.min.js');
 
@@ -139,12 +161,9 @@ jQuery(function() {
                 }
             };
         });
-
-        return mode;
     }
 
-    function initHooks(cm) {
-        var doc = cm.getDoc();
+    function initHooks() {
         var dw = {
             setWrap: dw_editor.setWrap,
             sizeCtl: dw_editor.sizeCtl,
@@ -157,21 +176,21 @@ jQuery(function() {
 
         dw_editor.setWrap = function(editor, value) {
             dw.setWrap(editor, value);
-            if (textarea.is(editor)) {
+            if (cm && textarea.is(editor)) {
                 cm.setOption('lineWrapping', value !== 'off');
             }
         };
 
         dw_editor.sizeCtl = function(editor, value) {
             dw.sizeCtl(editor, value);
-            if (textarea.is(editor)) {
+            if (cm && textarea.is(editor)) {
                 cm.setSize(null, textarea.css('height'));
             }
         };
 
         window.currentHeadlineLevel = function(id) {
-            if (textarea.is('#' + id)) {
-                textarea.val(doc.getValue());
+            if (cm && textarea.is('#' + id)) {
+                textarea.val(cm.getDoc().getValue());
             }
             return dw.currentHeadlineLevel(id);
         };
@@ -180,7 +199,8 @@ jQuery(function() {
             dw.selection_class.apply(this);
             var dw_getText = this.getText;
             this.geText = function() {
-                if (textarea.is(this.obj)) {
+                if (cm && textarea.is(this.obj)) {
+                    var doc = cm.getDoc();
                     var from = doc.indexFromPos(this.start);
                     var to = doc.indexFromPos(this.end);
                     return doc.getRange(from, to);
@@ -191,7 +211,8 @@ jQuery(function() {
         };
 
         window.DWgetSelection = function(editor) {
-            if (textarea.is(editor)) {
+            if (cm && textarea.is(editor)) {
+                var doc = cm.getDoc();
                 var selection = new window.selection_class();
                 selection.obj = editor;
                 selection.start = doc.indexFromPos(doc.getCursor('from'));
@@ -205,7 +226,8 @@ jQuery(function() {
         };
 
         window.DWsetSelection = function(selection) {
-            if (textarea.is(selection.obj)) {
+            if (cm && textarea.is(selection.obj)) {
+                var doc = cm.getDoc();
                 var anchor = doc.posFromIndex(selection.start);
                 var head = doc.posFromIndex(selection.end);
                 doc.setSelection(anchor, head);
@@ -216,7 +238,8 @@ jQuery(function() {
         };
 
         window.pasteText = function(selection, text, opts) {
-            if (textarea.is(selection.obj)) {
+            if (cm && textarea.is(selection.obj)) {
+                var doc = cm.getDoc();
                 textarea.val(doc.getValue());
                 var from = doc.posFromIndex(selection.start);
                 var to = doc.posFromIndex(selection.end);
@@ -251,29 +274,39 @@ jQuery(function() {
         }
     }
 
-    function initSettingsMenu(settings) {
+    function initSettingsMenu() {
         var menu = jQuery('<ul>').addClass('cm-settings-menu');
-        var callback = {};
+        var items = [
+            'theme',
+            'fontsize',
+            'keymap',
+            'closebrackets',
+            'linenumbers',
+            'activeline',
+            'matchbrackets',
+            'syntax',
+        ];
 
-        jQuery.each(settings, function(index, setting) {
-            var title = LANG.plugins.codemirror['setting_' + setting.name];
+        jQuery.each(items, function(index, name) {
+            var setting = settings[name];
+            var title = LANG.plugins.codemirror['setting_' + name];
 
             // Separator
-            if (setting.name === '-') {
+            if (name === '-') {
                 menu.append('<li>-</li>');
                 return;
             }
 
             var item = jQuery('<li>');
             var link = jQuery('<a>').html(title);
-            var value = getSetting(setting.name, setting.default_);
+            var value = getSetting(name);
 
             if (setting.choices) {
                 // Choice setting
                 var submenu = jQuery('<ul>');
                 jQuery.each(setting.choices, function(index, choice) {
                     var item = jQuery('<li>');
-                    item.data('setting', setting.name);
+                    item.data('setting', name);
                     item.data('choice', choice);
                     var link = jQuery('<a>').html(choice);
                     var icon = jQuery('<span>').addClass('ui-icon');
@@ -289,7 +322,7 @@ jQuery(function() {
                 item.append(submenu);
             } else {
                 // Boolean setting
-                item.data('setting', setting.name);
+                item.data('setting', name);
                 var icon = jQuery('<span>').addClass('ui-icon');
                 if (value === '1') {
                     icon.addClass('ui-icon-check');
@@ -301,8 +334,6 @@ jQuery(function() {
 
             item.append(link);
             menu.append(item);
-            callback[setting.name] = setting.callback;
-            setting.callback(value);
         });
 
         menu.menu({position: {my: 'right top', at: 'left top'}});
@@ -334,7 +365,7 @@ jQuery(function() {
                 icon.addClass('ui-icon-check');
             } else {
                 // Boolean setting
-                value = getSetting(name) === '1' ? '0' : '1';
+                value = icon.hasClass('ui-icon-check') ? '0' : '1';
                 icon.removeClass('ui-icon-blank ui-icon-check');
                 if (value === '1') {
                     icon.addClass('ui-icon-check');
@@ -344,26 +375,36 @@ jQuery(function() {
             }
 
             setSetting(name, value);
-            callback[name](value);
         });
 
         menu.appendTo('body');
         initSettingsButton(menu);
     }
 
-    function getSetting(name, default_) {
+    function getSetting(name) {
         var value = DokuCookie.getValue('cm-' + name);
+        var setting = settings[name];
 
-        if (!value && default_) {
-            value = default_;
-            DokuCookie.setValue('cm-' + name, default_);
+        if (setting.choices) {
+            // Choice setting
+            if (!value || jQuery.inArray(value, setting.choices) < 0) {
+                value = setting.default_;
+            }
+        } else {
+            // Boolean setting
+            if (value !== '0' && value !== '1') {
+                value = setting.default_;
+            }
         }
+
+        DokuCookie.setValue('cm-' + name, value);
 
         return value;
     }
 
     function setSetting(name, value) {
         DokuCookie.setValue('cm-' + name, value);
+        settings[name].callback(value);
     }
 
     function requireKeyMap(name, callback) {
