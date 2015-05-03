@@ -28,6 +28,7 @@ module.exports = function(grunt) {
                     'action.php',
                     'dist/**/*.css',
                     'dist/**/*.js',
+                    'dist/**/*.map',
                     'lang/**/*.php',
                     'plugin.info.txt',
                     'settings.png',
