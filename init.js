@@ -112,6 +112,9 @@ jQuery(function() {
         },
     };
 
+    // Use plugin configuration
+    settings['nativeeditor'].default_ = JSINFO.plugin_codemirror.nativeeditor;
+
     initMode();
     initHooks();
     initSettingsMenu();
