@@ -144,6 +144,9 @@ jQuery(function() {
             'Backspace' : function(cm) {
                 return indentCommand(cm, 'Backspace');
             },
+            'Ctrl-Enter': function() {
+                jQuery('#edbtn__save').click();
+            },
         });
         cm.setOption('scrollbarStyle', 'overlay');
         cm.setSize(null, textarea.css('height'));
