@@ -75,7 +75,7 @@ jQuery(function() {
             }
         },
         nativeeditor: {
-            default_: '0',
+            default_: JSINFO.plugin_codemirror.nativeeditor.toString(),
             callback: function(value) {
                 if (!cm && value === '0') {
                     initCodeMirror();
@@ -111,9 +111,6 @@ jQuery(function() {
             }
         },
     };
-
-    // Use plugin configuration
-    settings['nativeeditor'].default_ = JSINFO.plugin_codemirror.nativeeditor;
 
     initMode();
     initHooks();
