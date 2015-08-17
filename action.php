@@ -30,7 +30,7 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
         $info = $this->getInfo();
         $version = str_replace('-', '', $info['date']);
         $base_url = DOKU_BASE . 'lib/plugins/codemirror';
-        $geshi = new GeSHi('', '', DOKU_INC . 'inc/geshi');
+        $geshi = new GeSHi();
         $mode_acronym = new Doku_Parser_Mode_acronym(array_keys(getAcronyms()));
 
         $jsinfo = array(
