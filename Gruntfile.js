@@ -74,6 +74,7 @@ module.exports = function(grunt) {
                     src: ['*/*.js', '!*/*test.js'],
                     dest: 'dist/modes',
                     ext: '.min.js',
+                    extDot: 'last',
                     flatten: true,
                 }],
             },

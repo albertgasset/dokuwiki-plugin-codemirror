@@ -97,12 +97,13 @@ jQuery(function() {
             choices: [
                 '3024-day', '3024-night', 'ambiance', 'ambiance-mobile',
                 'base16-dark', 'base16-light', 'blackboard', 'cobalt',
-                'default', 'eclipse', 'elegant', 'erlang-dark', 'lesser-dark',
-                'mbo', 'mdn-like', 'midnight', 'monokai', 'neat', 'neo',
-                'night', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark',
-                'rubyblue', 'solarized', 'the-matrix', 'tomorrow-night-bright',
+                'default', 'dracula', 'eclipse', 'elegant', 'erlang-dark',
+                'icecoder', 'lesser-dark', 'material', 'mbo', 'mdn-like',
+                'midnight', 'monokai', 'neat', 'neo', 'night', 'paraiso-dark',
+                'paraiso-light', 'pastel-on-dark', 'seti', 'rubyblue',
+                'solarized', 'the-matrix', 'tomorrow-night-bright',
                 'tomorrow-night-eighties', 'twilight', 'vibrant-ink', 'xq-dark',
-                'xq-light', 'zenburn',
+                'xq-light', 'yeti', 'zenburn',
             ],
             callback: function(value) {
                 if (cm) {
