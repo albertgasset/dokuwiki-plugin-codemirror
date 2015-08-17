@@ -41,6 +41,7 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
             'iconURL' => "$base_url/settings.png",
             'languages' => $geshi->get_supported_languages(),
             'mathjax' => !plugin_isdisabled('mathjax'),
+            'nativeeditor' => $this->getConf('nativeeditor'),
             'schemes' => array_values(getSchemes()),
             'smileys' => array_keys(getSmileys()),
             'version' => $version,
