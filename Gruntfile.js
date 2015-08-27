@@ -26,6 +26,7 @@ module.exports = function(grunt) {
                     'LICENSE',
                     'README',
                     'action.php',
+                    'conf/*.php',
                     'dist/**/*.css',
                     'dist/**/*.js',
                     'dist/**/*.map',
