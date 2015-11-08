@@ -247,7 +247,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
     }, {
         name: 'listblock', // 10
         type: 'container',
-        allowedTypes: ['formatting', 'substition', 'disabled'],
+        allowedTypes: ['formatting', 'substition', 'disabled', 'protected'],
         entries: [
             {sol: true, match: /^ {2,}[\-\*]/, style: 'def'},
             {sol: true, match: /^\t{1,}[\-\*]/, style: 'def'},
