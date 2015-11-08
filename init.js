@@ -5,7 +5,8 @@
  * @license GNU GPL version 2 or later
  */
 
-/* global CodeMirror, DokuCookie, dw_editor, jQuery, JSINFO, LANG */
+/* global CodeMirror, DokuCookie, dw_editor, dw_locktimer, jQuery,
+          JSINFO, LANG */
 
 jQuery(function() {
     'use strict';
@@ -187,6 +188,13 @@ jQuery(function() {
         });
         cm.setOption('scrollbarStyle', 'overlay');
         cm.setSize(null, textarea.css('height'));
+        cm.getDoc().on('change', function() {
+            var now = new Date();
+            if (now.getTime() - dw_locktimer.lasttime.getTime() > 30000) {
+                textarea.val(cm.getDoc().getValue());
+                dw_locktimer.refresh();
+            }
+        });
         jQuery.each(settings, function(name, setting) {
             if (name !== 'nativeeditor') {
                 var value = getSetting(name);
