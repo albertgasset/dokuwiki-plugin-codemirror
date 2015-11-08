@@ -567,12 +567,13 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
     }
 
     function wordsRegExp(words, end, flags) {
+        var escapedWords = [];
         for (var i = 0; i < words.length; i += 1) {
-            words[i] = escapeRegExp(words[i]);
+            escapedWords.push(escapeRegExp(words[i]));
         }
         end = end || '';
         flags = flags || '';
-        return new RegExp('^(?:' + words.join('|') + ')' + end, flags);
+        return new RegExp('^(?:' + escapedWords.join('|') + ')' + end, flags);
     }
 
     function emailLinkRegExp() {
