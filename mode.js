@@ -697,30 +697,27 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         var allowed = state.current.allowedModes;
         var pattern, style;
 
-        // Try custom function first
-        if (state.current.token) {
-            style = state.current.token(stream, state);
-            if (stream.current()) {
-                return style;
-            }
-        }
-
-        // Match entry patterns
-        for (var i = 0; i < allowed.length; i += 1) {
-            pattern = matchPatterns(stream, state, allowed[i].entries);
-            if (pattern) {
-                state.stack.push(state.current);
-                state.current = allowed[i];
-                if (pattern.mode) {
-                    enterInnerMode(state, pattern.mode);
+        // Match patterns
+        for (var i = 0; !pattern && i < allowed.length; i += 1) {
+            if (allowed[i] === state.current) {
+                // Try custom function first
+                if (state.current.token) {
+                    style = state.current.token(stream, state);
+                    if (stream.current()) {
+                        return style;
+                    }
                 }
-                break;
+                pattern = matchPatterns(stream, state, allowed[i].patterns);
+            } else {
+                pattern = matchPatterns(stream, state, allowed[i].entries);
+                if (pattern) {
+                    state.stack.push(state.current);
+                    state.current = allowed[i];
+                    if (pattern.mode) {
+                        enterInnerMode(state, pattern.mode);
+                    }
+                }
             }
-        }
-
-        // Match mode patterns
-        if (!pattern) {
-            pattern = matchPatterns(stream, state, state.current.patterns);
         }
 
         if (pattern) {
@@ -759,13 +756,15 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
             src.allowedModes = [];
             if (src.allowedTypes) {
                 connectMode(src);
+            } else {
+                src.allowedModes.push(src);
             }
         }
 
         function connectMode(src) {
             for (var i = 0; i < dokuModes.length; i += 1) {
                 var dest = dokuModes[i];
-                if (src !== dest && allowsType(src, dest.type)) {
+                if (src === dest || allowsType(src, dest.type)) {
                     src.allowedModes.push(dest);
                 }
             }
