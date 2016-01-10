@@ -113,6 +113,7 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         cobol: {name: 'cobol'},
         coffeescript: {name: 'coffeescript'},
         cpp: {name: 'clike', mime: 'text/x-c++src'},
+        crystal: {name: 'crystal'},
         csharp: {name: 'clike', mime: 'text/x-csharp'},
         css: {name: 'css', mime: 'text/css'},
         cypher: {name: 'cypher'},
