@@ -10,6 +10,7 @@
 CodeMirror.defineMode('doku', function(config, parserConfig) {
     'use strict';
 
+    var dokuModes;
     var mode = {
 
         blankLine: function(state) {
@@ -246,10 +247,11 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         xquery: {name: 'xquery'},
         xu: {name: 'mscgen', mime: 'text/x-xu'},
         yaml: {name: 'yaml'},
+        'yaml-frontmatter': {name: 'yaml-frontmatter', deps: ['gfm']},
         z80: {name: 'z80'},
     };
 
-    var dokuModes = [{
+    dokuModes = [{
         name: 'base', // 0
         allowedTypes: ['container', 'baseonly', 'formatting',
                        'substition', 'protected', 'disabled'],

@@ -496,6 +496,8 @@ jQuery(function() {
     }
 
     function requireKeyMap(name, callback) {
+        var intervalID;
+
         if (CodeMirror.keyMap[name]) {
             callback();
             return;
@@ -521,7 +523,7 @@ jQuery(function() {
             }
         }
 
-        var intervalID = setInterval(check, 200);
+        intervalID = setInterval(check, 200);
     }
 
     function indentCommand(cm, key) {
