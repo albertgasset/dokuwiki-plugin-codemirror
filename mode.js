@@ -97,163 +97,6 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
         },
     };
 
-    var innerModes = {
-        apl: {name: 'apl'},
-        asciiarmor: {name: 'asciiarmor'},
-        'asn.1': {name: 'asn.1', mime: 'text/x-ttcn-asn'},
-        asterisk: {name: 'asterisk'},
-        aspx: {name: 'htmlembedded', mime: 'application/x-aspx',
-               deps: ['clike']},
-        bash: {name: 'shell'},
-        brainfuck: {name: 'brainfuck'},
-        c: {name: 'clike', mime: 'text/x-csrc'},
-        cassandra: {name: 'sql', mime: 'text/x-cassandra'},
-        ceylon: {name: 'clike', mime: 'text/x-ceylon'},
-        clojure: {name: 'clojure'},
-        cmake: {name: 'cmake'},
-        cobol: {name: 'cobol'},
-        coffeescript: {name: 'coffeescript'},
-        cpp: {name: 'clike', mime: 'text/x-c++src'},
-        crystal: {name: 'crystal'},
-        csharp: {name: 'clike', mime: 'text/x-csharp'},
-        css: {name: 'css', mime: 'text/css'},
-        cypher: {name: 'cypher'},
-        cython: {name: 'python', mime: 'text/x-cython'},
-        diff: {name: 'diff'},
-        d: {name: 'd', mime: 'text/x-d'},
-        dart: {name: 'dart'},
-        django: {name: 'django', deps: ['htmlmixed']},
-        dockerfile: {name: 'dockerfile'},
-        dtd: {name: 'dtd'},
-        dylan: {name: 'dylan'},
-        ebnf: {name: 'ebnf'},
-        ecl: {name: 'ecl'},
-        ecmascript: {name: 'javascript', mime: 'application/ecmascript'},
-        elm: {name: 'elm'},
-        erb: {name: 'htmlembedded', mime: 'application/x-erb',
-              deps: ['ruby']},
-        eiffel: {name: 'eiffel'},
-        ejs: {name: 'htmlembedded', mime: 'application/x-ejs',
-              deps: ['javascript']},
-        erlang: {name: 'erlang'},
-        factor: {name: 'factor'},
-        forth: {name: 'forth'},
-        fortran: {name: 'fortran'},
-        fsharp: {name: 'mllike', mime: 'text/x-fsharp'},
-        gfm: {name: 'gfm'},
-        gherkin: {name: 'gherkin'},
-        glsl: {name: 'clike', mime: 'x-shader/x-vertex'},
-        go: {name: 'go'},
-        groovy: {name: 'groovy'},
-        gss: {name: 'css', mime: 'text/x-gss'},
-        haml: {name: 'haml'},
-        handlebars: {name: 'handlebars'},
-        haskell: {name: 'haskell'},
-        'haskell-literate': {name: 'haskell-literate'},
-        haxe: {name: 'haxe', mime: 'text/x-haxe'},
-        hive: {name: 'sql', mime: 'text/x-hive'},
-        html: {name: 'htmlmixed'},
-        html5: {name: 'htmlmixed'},
-        http: {name: 'http'},
-        hxml: {name: 'haxe', mime: 'text/x-hxml'},
-        idl: {name: 'idl'},
-        ini: {name: 'properties'},
-        jade: {name: 'jade', deps: ['javascript']},
-        java5: {name: 'clike', mime: 'text/x-java'},
-        java: {name: 'clike', mime: 'text/x-java'},
-        javascript: {name: 'javascript', mime: 'application/javascript'},
-        jinja2: {name: 'jinja2'},
-        json: {name: 'javascript', mime: 'application/json'},
-        jsonld: {name: 'javascript', mime: 'application/ld+json'},
-        jsp: {name: 'htmlembedded', mime: 'application/x-jsp',
-              deps: ['clike']},
-        jsx: {name: 'jsx'},
-        julia: {name: 'julia'},
-        kotlin: {name: 'clike', mime: 'text/x-kotlin'},
-        latex: {name: 'stex'},
-        less: {name: 'css', mime: 'text/x-less'},
-        lisp: {name: 'commonlisp'},
-        livescript: {name: 'livescript'},
-        lua: {name: 'lua'},
-        mariadb: {name: 'sql', mime: 'text/x-mariadb'},
-        markdown: {name: 'markdown'},
-        matlab: {name: 'octave'},
-        modelica: {name: 'modelica', mime: 'text/x-modelica'},
-        mscgen: {name: 'mscgen'},
-        mscgenny: {name: 'mscgen', mime: 'text/x-msgenny'},
-        mssql: {name: 'sql', mime: 'text/x-mssql'},
-        mumps: {name: 'mumps'},
-        mysql: {name: 'sql', mime: 'text/x-sql'},
-        nginx: {name: 'nginx'},
-        nsis: {name: 'nsis'},
-        ntriples: {name: 'ntriples'},
-        objc: {name: 'clike', mime: 'text/x-objectivec'},
-        ocaml: {name: 'mllike', mime: 'text/x-ocaml'},
-        octave: {name: 'octave'},
-        oz: {name: 'oz'},
-        pascal: {name: 'pascal'},
-        pgp: {name: 'asciiarmor'},
-        pegjs: {name: 'pegjs'},
-        perl: {name: 'perl'},
-        php: {name: 'php', mime: 'application/x-httpd-php-open',
-              deps: ['htmlmixed']},
-        pig: {name: 'pig', mime: 'text/x-pig'},
-        plsql: {name: 'sql', mime: 'text/x-plsql'},
-        postgresql: {name: 'sql', mime: 'text/x-sql'},
-        properties: {name: 'properties'},
-        python: {name: 'python', mime: 'text/x-python'},
-        puppet: {name: 'puppet'},
-        q: {name: 'q'},
-        r: {name: 'r'},
-        rpmchanges: {name: 'rpm', mime: 'text/x-rpm-changes'},
-        rpmspec: {name: 'rpm', mime: 'text/x-rpm-spec'},
-        rst: {name: 'rst'},
-        ruby: {name: 'ruby'},
-        rust: {name: 'rust'},
-        sass: {name: 'sass'},
-        scala: {name: 'clike', mime: 'text/x-scala'},
-        scheme: {name: 'scheme'},
-        scss: {name: 'css', mime: 'text/x-scss'},
-        sieve: {name: 'sieve'},
-        slim: {name: 'slim'},
-        smalltalk: {name: 'smalltalk'},
-        smarty: {name: 'smarty', options: {version: 2}},
-        smarty3: {name: 'smarty', options: {version: 3}},
-        solr: {name: 'solr'},
-        soy: {name: 'soy'},
-        sparql: {name: 'sparql'},
-        spreadsheet: {name: 'spreadsheet'},
-        sql: {name: 'sql', mime: 'text/x-sql'},
-        squirrel: {name: 'clike', mime: 'text/x-squirrel'},
-        stylus: {name: 'stylus'},
-        swift: {name: 'swift'},
-        tcl: {name: 'tcl'},
-        text: {name: 'doku-null'},
-        textile: {name: 'textile'},
-        tiddlywiki: {name: 'tiddlywiki'},
-        tiki: {name: 'tiki'},
-        toml: {name: 'toml'},
-        tornado: {name: 'tornado', deps: ['htmlmixed']},
-        troff: {name: 'troff'},
-        ttcn: {name: 'ttcn', mime: 'text/x-ttcn'},
-        'ttcn-cfg': {name: 'ttcn-cfg', mime: 'text/x-ttcn-cfg'},
-        turtle: {name: 'turtle'},
-        twig: {name: 'twig'},
-        typescript: {name: 'javascript', mime: 'application/typescript'},
-        vbnet: {name: 'vb'},
-        vbscript: {name: 'vbscript'},
-        velocity: {name: 'velocity'},
-        verilog: {name: 'verilog'},
-        vhdl: {name: 'vhdl'},
-        vue: {name: 'vue'},
-        xml: {name: 'xml'},
-        xquery: {name: 'xquery'},
-        xu: {name: 'mscgen', mime: 'text/x-xu'},
-        yaml: {name: 'yaml'},
-        'yaml-frontmatter': {name: 'yaml-frontmatter', deps: ['gfm']},
-        z80: {name: 'z80'},
-    };
-
     dokuModes = [{
         name: 'base', // 0
         allowedTypes: ['container', 'baseonly', 'formatting',
@@ -391,22 +234,22 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
     }, {
         name: 'php', // 180
         type: 'protected',
-        entries: [{match: '<php>', style: 'tag', mode: 'php'}],
+        entries: [{match: '<php>', style: 'tag', lang: 'php'}],
         patterns: [{match: '</php>', exit: true, style: 'tag'}],
     }, {
         name: 'phpblock', // 180
         type: 'protected',
-        entries: [{match: '<PHP>', style: 'tag', mode: 'php'}],
+        entries: [{match: '<PHP>', style: 'tag', lang: 'php'}],
         patterns: [{match: '</PHP>', exit: true, style: 'tag'}],
     }, {
         name: 'html', // 190
         type: 'protected',
-        entries: [{match: '<html>', style: 'tag', mode: 'html'}],
+        entries: [{match: '<html>', style: 'tag', lang: 'html'}],
         patterns: [{match: '</html>', exit: true, style: 'tag'}],
     }, {
         name: 'htmlblock', // 190
         type: 'protected',
-        entries: [{match: '<HTML>', style: 'tag', mode: 'html'}],
+        entries: [{match: '<HTML>', style: 'tag', lang: 'html'}],
         patterns: [{match: '</HTML>', exit: true, style: 'tag'}],
     }, {
         name: 'code', // 200
@@ -620,8 +463,8 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
                           any + ']|$)', 'i');
     }
 
-    function enterInnerMode(state, mode) {
-        state.innerMode = parserConfig.loadMode(innerModes[mode]);
+    function enterInnerMode(state, lang) {
+        state.innerMode = parserConfig.loadMode(lang);
         if (state.innerMode.startState) {
             state.innerState = state.innerMode.startState();
         }
@@ -688,7 +531,11 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
             var style;
             if (!state.codeLang) {
                 state.codeLang  = stream.current();
-                style = innerModes[state.codeLang] ? 'keyword' : 'error';
+                if (parserConfig.validLang(state.codeLang)) {
+                    style = 'keyword';
+                } else {
+                    style = 'error';
+                }
             } else if (!state.codeFilename) {
                 state.codeFilename = true;
                 style = 'string';
@@ -719,8 +566,8 @@ CodeMirror.defineMode('doku', function(config, parserConfig) {
                 if (pattern) {
                     state.stack.push(state.current);
                     state.current = allowed[i];
-                    if (pattern.mode) {
-                        enterInnerMode(state, pattern.mode);
+                    if (pattern.lang) {
+                        enterInnerMode(state, pattern.lang);
                     }
                 }
             }

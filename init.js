@@ -11,13 +11,164 @@
 jQuery(function() {
     'use strict';
 
-    var textarea = jQuery('#wiki__text');
-
-    if (!textarea.length) {
-        return;
-    }
-
     var cm, dokuMode;
+
+    var codeModes = {
+        apl: {name: 'apl'},
+        asciiarmor: {name: 'asciiarmor'},
+        'asn.1': {name: 'asn.1', mime: 'text/x-ttcn-asn'},
+        asterisk: {name: 'asterisk'},
+        aspx: {name: 'htmlembedded', mime: 'application/x-aspx',
+               deps: ['clike']},
+        bash: {name: 'shell'},
+        brainfuck: {name: 'brainfuck'},
+        c: {name: 'clike', mime: 'text/x-csrc'},
+        cassandra: {name: 'sql', mime: 'text/x-cassandra'},
+        ceylon: {name: 'clike', mime: 'text/x-ceylon'},
+        clojure: {name: 'clojure'},
+        cmake: {name: 'cmake'},
+        cobol: {name: 'cobol'},
+        coffeescript: {name: 'coffeescript'},
+        cpp: {name: 'clike', mime: 'text/x-c++src'},
+        crystal: {name: 'crystal'},
+        csharp: {name: 'clike', mime: 'text/x-csharp'},
+        css: {name: 'css', mime: 'text/css'},
+        cypher: {name: 'cypher'},
+        cython: {name: 'python', mime: 'text/x-cython'},
+        diff: {name: 'diff'},
+        d: {name: 'd', mime: 'text/x-d'},
+        dart: {name: 'dart'},
+        django: {name: 'django', deps: ['htmlmixed']},
+        dockerfile: {name: 'dockerfile'},
+        dtd: {name: 'dtd'},
+        dylan: {name: 'dylan'},
+        ebnf: {name: 'ebnf'},
+        ecl: {name: 'ecl'},
+        ecmascript: {name: 'javascript', mime: 'application/ecmascript'},
+        elm: {name: 'elm'},
+        erb: {name: 'htmlembedded', mime: 'application/x-erb',
+              deps: ['ruby']},
+        eiffel: {name: 'eiffel'},
+        ejs: {name: 'htmlembedded', mime: 'application/x-ejs',
+              deps: ['javascript']},
+        erlang: {name: 'erlang'},
+        factor: {name: 'factor'},
+        forth: {name: 'forth'},
+        fortran: {name: 'fortran'},
+        fsharp: {name: 'mllike', mime: 'text/x-fsharp'},
+        gfm: {name: 'gfm'},
+        gherkin: {name: 'gherkin'},
+        glsl: {name: 'clike', mime: 'x-shader/x-vertex'},
+        go: {name: 'go'},
+        groovy: {name: 'groovy'},
+        gss: {name: 'css', mime: 'text/x-gss'},
+        haml: {name: 'haml'},
+        handlebars: {name: 'handlebars'},
+        haskell: {name: 'haskell'},
+        'haskell-literate': {name: 'haskell-literate'},
+        haxe: {name: 'haxe', mime: 'text/x-haxe'},
+        hive: {name: 'sql', mime: 'text/x-hive'},
+        html: {name: 'htmlmixed'},
+        html5: {name: 'htmlmixed'},
+        http: {name: 'http'},
+        hxml: {name: 'haxe', mime: 'text/x-hxml'},
+        idl: {name: 'idl'},
+        ini: {name: 'properties'},
+        jade: {name: 'jade', deps: ['javascript']},
+        java5: {name: 'clike', mime: 'text/x-java'},
+        java: {name: 'clike', mime: 'text/x-java'},
+        javascript: {name: 'javascript', mime: 'application/javascript'},
+        jinja2: {name: 'jinja2'},
+        json: {name: 'javascript', mime: 'application/json'},
+        jsonld: {name: 'javascript', mime: 'application/ld+json'},
+        jsp: {name: 'htmlembedded', mime: 'application/x-jsp',
+              deps: ['clike']},
+        jsx: {name: 'jsx'},
+        julia: {name: 'julia'},
+        kotlin: {name: 'clike', mime: 'text/x-kotlin'},
+        latex: {name: 'stex'},
+        less: {name: 'css', mime: 'text/x-less'},
+        lisp: {name: 'commonlisp'},
+        livescript: {name: 'livescript'},
+        lua: {name: 'lua'},
+        mariadb: {name: 'sql', mime: 'text/x-mariadb'},
+        markdown: {name: 'markdown'},
+        matlab: {name: 'octave'},
+        modelica: {name: 'modelica', mime: 'text/x-modelica'},
+        mscgen: {name: 'mscgen'},
+        mscgenny: {name: 'mscgen', mime: 'text/x-msgenny'},
+        mssql: {name: 'sql', mime: 'text/x-mssql'},
+        mumps: {name: 'mumps'},
+        mysql: {name: 'sql', mime: 'text/x-sql'},
+        nginx: {name: 'nginx'},
+        nsis: {name: 'nsis'},
+        ntriples: {name: 'ntriples'},
+        objc: {name: 'clike', mime: 'text/x-objectivec'},
+        ocaml: {name: 'mllike', mime: 'text/x-ocaml'},
+        octave: {name: 'octave'},
+        oz: {name: 'oz'},
+        pascal: {name: 'pascal'},
+        pgp: {name: 'asciiarmor'},
+        pegjs: {name: 'pegjs'},
+        perl: {name: 'perl'},
+        php: {name: 'php', mime: 'application/x-httpd-php-open',
+              deps: ['htmlmixed']},
+        pig: {name: 'pig', mime: 'text/x-pig'},
+        plsql: {name: 'sql', mime: 'text/x-plsql'},
+        postgresql: {name: 'sql', mime: 'text/x-sql'},
+        properties: {name: 'properties'},
+        python: {name: 'python', mime: 'text/x-python'},
+        puppet: {name: 'puppet'},
+        q: {name: 'q'},
+        r: {name: 'r'},
+        rpmchanges: {name: 'rpm', mime: 'text/x-rpm-changes'},
+        rpmspec: {name: 'rpm', mime: 'text/x-rpm-spec'},
+        rst: {name: 'rst'},
+        ruby: {name: 'ruby'},
+        rust: {name: 'rust'},
+        sass: {name: 'sass'},
+        scala: {name: 'clike', mime: 'text/x-scala'},
+        scheme: {name: 'scheme'},
+        scss: {name: 'css', mime: 'text/x-scss'},
+        sieve: {name: 'sieve'},
+        slim: {name: 'slim'},
+        smalltalk: {name: 'smalltalk'},
+        smarty: {name: 'smarty', options: {version: 2}},
+        smarty3: {name: 'smarty', options: {version: 3}},
+        solr: {name: 'solr'},
+        soy: {name: 'soy'},
+        sparql: {name: 'sparql'},
+        spreadsheet: {name: 'spreadsheet'},
+        sql: {name: 'sql', mime: 'text/x-sql'},
+        squirrel: {name: 'clike', mime: 'text/x-squirrel'},
+        stylus: {name: 'stylus'},
+        swift: {name: 'swift'},
+        tcl: {name: 'tcl'},
+        text: {name: 'doku-null'},
+        textile: {name: 'textile'},
+        tiddlywiki: {name: 'tiddlywiki'},
+        tiki: {name: 'tiki'},
+        toml: {name: 'toml'},
+        tornado: {name: 'tornado', deps: ['htmlmixed']},
+        troff: {name: 'troff'},
+        ttcn: {name: 'ttcn', mime: 'text/x-ttcn'},
+        'ttcn-cfg': {name: 'ttcn-cfg', mime: 'text/x-ttcn-cfg'},
+        turtle: {name: 'turtle'},
+        twig: {name: 'twig'},
+        typescript: {name: 'javascript', mime: 'application/typescript'},
+        vbnet: {name: 'vb'},
+        vbscript: {name: 'vbscript'},
+        velocity: {name: 'velocity'},
+        verilog: {name: 'verilog'},
+        vhdl: {name: 'vhdl'},
+        vue: {name: 'vue'},
+        xml: {name: 'xml'},
+        xquery: {name: 'xquery'},
+        xu: {name: 'mscgen', mime: 'text/x-xu'},
+        yaml: {name: 'yaml'},
+        'yaml-frontmatter': {name: 'yaml-frontmatter', deps: ['gfm']},
+        z80: {name: 'z80'},
+    };
 
     var settings = {
         activeline: {
@@ -150,12 +301,62 @@ jQuery(function() {
         },
     };
 
-    initMode();
-    initHooks();
-    initSettingsMenu();
+    var textarea = jQuery('#wiki__text');
 
-    if (getSetting('nativeeditor') === '0') {
-        initCodeMirror();
+    CodeMirror.modeURL = url('/dist/modes/%N.min.js');
+
+    if (textarea.length) {
+        initMode();
+        initHooks();
+        initSettingsMenu();
+
+        if (getSetting('nativeeditor') === '0') {
+            initCodeMirror();
+        }
+    }
+
+    if (JSINFO.plugin_codemirror.codesyntax.toString() === '1') {
+        jQuery('#dokuwiki__content pre.code').each(function(index, element) {
+            var classNames = element.className.split(' ');
+            jQuery.each(classNames, function(index, className) {
+                if (!codeModes[className]) {
+                    return;
+                }
+                element.className = element.className + ' cm-s-default';
+                var mode = codeModes[className];
+                var value = jQuery(element).text();
+                var spec = mode.options || {};
+                spec.name = mode.mime || mode.name;
+                getCodeMode(className, {}, function() {
+                    CodeMirror.runMode(value, spec, element);
+                });
+                CodeMirror.runMode(value, spec, element);
+            });
+        });
+    }
+
+    function getCodeMode(lang, options, onLoadedAsync) {
+        var mode = codeModes[lang] || {name: 'doku-null'};
+        var deps = [mode.name].concat(mode.deps || []);
+        var loadNextDep = function() {
+            if (deps.length > 0) {
+                CodeMirror.requireMode(deps.pop(), loadNextDep);
+            } else {
+                onLoadedAsync();
+            }
+        };
+        do {
+            var dep = deps.pop();
+            if (!CodeMirror.modes.hasOwnProperty(dep)) {
+                CodeMirror.requireMode(dep, loadNextDep);
+                return CodeMirror.getMode(options, {name: 'doku-null'});
+            }
+        } while (deps.length > 0);
+
+        var spec = mode.options || {};
+        spec.name = mode.mime || mode.name;
+
+        return CodeMirror.getMode(options, spec);
     }
 
     function destroyCodeMirror() {
@@ -207,31 +408,18 @@ jQuery(function() {
     function initMode() {
         dokuMode = JSINFO.plugin_codemirror;
 
-        CodeMirror.modeURL = url('/dist/modes/%N.min.js');
-
         dokuMode.name = 'doku';
 
-        dokuMode.loadMode = function(innerMode) {
-            innerMode = innerMode || {name: 'doku-null'};
-            var deps = [innerMode.name].concat(innerMode.deps || []);
-            var loadNextDep = function() {
-                if (deps.length > 0) {
-                    CodeMirror.requireMode(deps.pop(), loadNextDep);
-                } else {
-                    // Reset syntax highlighting
-                    cm.setOption('mode', dokuMode);
-                }
+        dokuMode.loadMode = function(lang) {
+            var onLoadedAsync = function() {
+                // Reset syntax highlighting
+                cm.setOption('mode', dokuMode);
             };
-            do {
-                var dep = deps.pop();
-                if (!CodeMirror.modes.hasOwnProperty(dep)) {
-                    CodeMirror.requireMode(dep, loadNextDep);
-                    return CodeMirror.getMode(cm.options, {name: 'doku-null'});
-                }
-            } while (deps.length > 0);
-            var spec = innerMode.options || {};
-            spec.name = innerMode.mime || innerMode.name;
-            return CodeMirror.getMode(cm.options, spec);
+            return getCodeMode(lang, cm.options, onLoadedAsync);
+        };
+
+        dokuMode.validLang = function(lang) {
+            return codeModes[lang] !== undefined;
         };
 
         CodeMirror.defineMode('doku-null', function() {

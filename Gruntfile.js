@@ -89,6 +89,7 @@ module.exports = function(grunt) {
                     'codemirror/addon/mode/loadmode.js',
                     'codemirror/addon/mode/overlay.js',
                     'codemirror/addon/mode/simple.js',
+                    'codemirror/addon/runmode/runmode.js',
                     'codemirror/addon/search/jump-to-line.js',
                     'codemirror/addon/search/matchesonscrollbar.js',
                     'codemirror/addon/search/searchcursor.js',

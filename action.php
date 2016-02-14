@@ -13,7 +13,7 @@ require_once DOKU_INC . 'inc/parser/parser.php';
 class action_plugin_codemirror extends DokuWiki_Action_Plugin {
 
     static $actions = array('edit', 'create', 'source', 'preview',
-                            'locked', 'draft', 'recover');
+                            'locked', 'draft', 'recover', 'show');
 
     public function register(Doku_Event_Handler $controller) {
         $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE',
@@ -37,6 +37,7 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
             'acronyms' => $mode_acronym->acronyms,
             'baseURL' => $base_url,
             'camelcase' => (bool) $conf['camelcase'],
+            'codesyntax' => $this->getConf('codesyntax'),
             'entities' => array_keys(getEntities()),
             'iconURL' => "$base_url/settings.png",
             'languages' => $geshi->get_supported_languages(),
