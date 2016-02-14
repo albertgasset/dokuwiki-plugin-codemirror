@@ -87,6 +87,7 @@ module.exports = function(grunt) {
                     'codemirror/addon/edit/closebrackets.js',
                     'codemirror/addon/edit/matchbrackets.js',
                     'codemirror/addon/mode/loadmode.js',
+                    'codemirror/addon/mode/multiplex.js',
                     'codemirror/addon/mode/overlay.js',
                     'codemirror/addon/mode/simple.js',
                     'codemirror/addon/runmode/runmode.js',
