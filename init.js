@@ -17,7 +17,7 @@ jQuery(function() {
         return;
     }
 
-    var cm, mode;
+    var cm, dokuMode;
 
     var settings = {
         activeline: {
@@ -89,7 +89,7 @@ jQuery(function() {
             default_: '1',
             callback: function(value) {
                 if (cm) {
-                    cm.setOption('mode', value === '1' ? mode : 'null');
+                    cm.setOption('mode', value === '1' ? dokuMode : 'null');
                 }
             }
         },
@@ -205,25 +205,32 @@ jQuery(function() {
     }
 
     function initMode() {
-        mode = JSINFO.plugin_codemirror;
+        dokuMode = JSINFO.plugin_codemirror;
 
         CodeMirror.modeURL = url('/dist/modes/%N.min.js');
 
-        mode.name = 'doku';
-        mode.loadMode = function(mode) {
-            var spec = {};
-            if (mode) {
-                spec.name = mode.mime || mode.name;
-                jQuery.each(mode.options || [], function(key, value) {
-                    spec[key] = value;
-                });
-                jQuery.each(mode.deps || [], function(index, name) {
-                    CodeMirror.autoLoadMode(cm, name);
-                });
-                CodeMirror.autoLoadMode(cm, mode.name);
-            } else {
-                spec.name = 'doku-null';
-            }
+        dokuMode.name = 'doku';
+
+        dokuMode.loadMode = function(innerMode) {
+            innerMode = innerMode || {name: 'doku-null'};
+            var deps = [innerMode.name].concat(innerMode.deps || []);
+            var loadNextDep = function() {
+                if (deps.length > 0) {
+                    CodeMirror.requireMode(deps.pop(), loadNextDep);
+                } else {
+                    // Reset syntax highlighting
+                    cm.setOption('mode', dokuMode);
+                }
+            };
+            do {
+                var dep = deps.pop();
+                if (!CodeMirror.modes.hasOwnProperty(dep)) {
+                    CodeMirror.requireMode(dep, loadNextDep);
+                    return CodeMirror.getMode(cm.options, {name: 'doku-null'});
+                }
+            } while (deps.length > 0);
+            var spec = innerMode.options || {};
+            spec.name = innerMode.mime || innerMode.name;
             return CodeMirror.getMode(cm.options, spec);
         };
 
