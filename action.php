@@ -56,7 +56,6 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
 
         $event->data['script'][] = array(
             'type' => 'text/javascript',
-            'charset' => 'utf-8',
             '_data' => 'JSINFO.plugin_codemirror = ' . json_encode($jsinfo),
         );
 
