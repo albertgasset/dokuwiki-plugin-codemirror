@@ -57,6 +57,7 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 compress: false,
+                screwIE8: false,
                 sourceMap: true,
             },
             keymaps: {
