@@ -40,6 +40,8 @@ module.exports = function(grunt) {
         less: {
             options: {
                 compress: true,
+                sourceMap: true,
+                outputSourceFiles: true,
             },
             styles: {
                 dest: 'dist/styles.min.css',
@@ -59,6 +61,7 @@ module.exports = function(grunt) {
                 compress: false,
                 screwIE8: false,
                 sourceMap: true,
+                sourceMapIncludeSources: true,
             },
             keymaps: {
                 files: [{
