@@ -1,4 +1,4 @@
-/* jshint node: true */
+/* jshint node: true, maxlen: 100 */
 'use strict';
 
 module.exports = function(grunt) {
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
             keymaps: {
                 files: [{
                     expand: true,
-                    cwd: 'codemirror/keymap',
+                    cwd: 'node_modules/codemirror/keymap',
                     src: '*.js',
                     dest: 'dist/keymaps',
                     ext: '.min.js',
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
             modes: {
                 files: [{
                     expand: true,
-                    cwd: 'codemirror/mode',
+                    cwd: 'node_modules/codemirror/mode',
                     src: ['*/*.js', '!*/*test.js'],
                     dest: 'dist/modes',
                     ext: '.min.js',
@@ -86,22 +86,22 @@ module.exports = function(grunt) {
             scripts: {
                 dest: 'dist/scripts.min.js',
                 src: [
-                    'codemirror/lib/codemirror.js',
-                    'codemirror/addon/dialog/dialog.js',
-                    'codemirror/addon/edit/closebrackets.js',
-                    'codemirror/addon/edit/matchbrackets.js',
-                    'codemirror/addon/mode/loadmode.js',
-                    'codemirror/addon/mode/multiplex.js',
-                    'codemirror/addon/mode/overlay.js',
-                    'codemirror/addon/mode/simple.js',
-                    'codemirror/addon/runmode/runmode.js',
-                    'codemirror/addon/search/jump-to-line.js',
-                    'codemirror/addon/search/matchesonscrollbar.js',
-                    'codemirror/addon/search/searchcursor.js',
-                    'codemirror/addon/search/search.js',
-                    'codemirror/addon/selection/active-line.js',
-                    'codemirror/addon/scroll/annotatescrollbar.js',
-                    'codemirror/addon/scroll/simplescrollbars.js',
+                    'node_modules/codemirror/lib/codemirror.js',
+                    'node_modules/codemirror/addon/dialog/dialog.js',
+                    'node_modules/codemirror/addon/edit/closebrackets.js',
+                    'node_modules/codemirror/addon/edit/matchbrackets.js',
+                    'node_modules/codemirror/addon/mode/loadmode.js',
+                    'node_modules/codemirror/addon/mode/multiplex.js',
+                    'node_modules/codemirror/addon/mode/overlay.js',
+                    'node_modules/codemirror/addon/mode/simple.js',
+                    'node_modules/codemirror/addon/runmode/runmode.js',
+                    'node_modules/codemirror/addon/search/jump-to-line.js',
+                    'node_modules/codemirror/addon/search/matchesonscrollbar.js',
+                    'node_modules/codemirror/addon/search/searchcursor.js',
+                    'node_modules/codemirror/addon/search/search.js',
+                    'node_modules/codemirror/addon/selection/active-line.js',
+                    'node_modules/codemirror/addon/scroll/annotatescrollbar.js',
+                    'node_modules/codemirror/addon/scroll/simplescrollbars.js',
                     'mode.js',
                     'init.js',
                 ],
@@ -109,11 +109,11 @@ module.exports = function(grunt) {
         },
         watch: {
             keymaps: {
-                files: 'codemirror/keymap/*.js',
+                files: 'node_modules/codemirror/keymap/*.js',
                 tasks: ['uglify:keymaps'],
             },
             modes: {
-                files: 'codemirror/mode/*/*.js',
+                files: 'node_modules/codemirror/mode/*/*.js',
                 tasks: ['uglify:modes'],
             },
             scripts: {
@@ -121,7 +121,7 @@ module.exports = function(grunt) {
                 tasks: ['uglify:scripts'],
             },
             less: {
-                files: ['<%= less.styles.src %>', 'codemirror/**/*.css'],
+                files: ['<%= less.styles.src %>', 'node_modules/codemirror/**/*.css'],
                 tasks: ['less'],
             },
         },
