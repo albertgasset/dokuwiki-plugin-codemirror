@@ -23,6 +23,10 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
     public function handle_tpl_metaheader_output(Doku_Event &$event, $param) {
         global $ACT, $INFO, $conf;
 
+        if ($ACT == 'show' and !$this->getConf('codesyntax')) {
+            return;
+        }
+
         if (!in_array($ACT, self::$actions)) {
             return;
         }
