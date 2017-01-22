@@ -34,7 +34,6 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
         $info = $this->getInfo();
         $version = str_replace('-', '', $info['date']);
         $base_url = DOKU_BASE . 'lib/plugins/codemirror';
-        $geshi = new GeSHi();
         $mode_acronym = new Doku_Parser_Mode_acronym(array_keys(getAcronyms()));
 
         $jsinfo = array(
@@ -44,8 +43,6 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
             'codesyntax' => $this->getConf('codesyntax'),
             'entities' => array_keys(getEntities()),
             'iconURL' => "$base_url/settings.png",
-            'languages' => $geshi->get_supported_languages(),
-            'mathjax' => !plugin_isdisabled('mathjax'),
             'nativeeditor' => $this->getConf('nativeeditor'),
             'schemes' => array_values(getSchemes()),
             'smileys' => array_keys(getSmileys()),
