@@ -47,6 +47,7 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
             'schemes' => array_values(getSchemes()),
             'smileys' => array_keys(getSmileys()),
             'version' => $version,
+            'usenativescroll' => $this->getConf('usenativescroll'),
         );
 
         $event->data['link'][] = array(
