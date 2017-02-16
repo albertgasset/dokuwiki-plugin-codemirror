@@ -8,3 +8,4 @@ $lang['js']['setting_linenumbers'] = 'Zeige Zeilennummern';
 $lang['js']['setting_matchbrackets'] = 'passende Klammern hervorheben';
 $lang['js']['setting_syntax'] = 'Syntax hervorheben';
 $lang['js']['setting_theme'] = 'Farbschema';
+$lang['js']['setting_showinvisibles'] = 'Leerzeichen anzeigen';
