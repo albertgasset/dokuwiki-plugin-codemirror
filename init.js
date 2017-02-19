@@ -399,7 +399,10 @@ jQuery(function() {
                 jQuery('#edbtn__save').click();
             },
         });
-        cm.setOption('scrollbarStyle', 'overlay');
+        cm.setOption(
+            'scrollbarStyle',
+            JSINFO.plugin_codemirror.usenativescroll == 1 ? 'native' : 'overlay'
+        );
         cm.setSize(null, textarea.css('height'));
         cm.getDoc().on('change', function() {
             var now = new Date();
