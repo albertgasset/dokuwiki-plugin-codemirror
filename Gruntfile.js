@@ -102,6 +102,7 @@ module.exports = function(grunt) {
                     'node_modules/codemirror/addon/selection/active-line.js',
                     'node_modules/codemirror/addon/scroll/annotatescrollbar.js',
                     'node_modules/codemirror/addon/scroll/simplescrollbars.js',
+                    'node_modules/cm-show-invisibles/lib/show-invisibles.js',
                     'mode.js',
                     'init.js',
                 ],
