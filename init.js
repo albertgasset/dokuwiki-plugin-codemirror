@@ -311,6 +311,20 @@ jQuery(function() {
                 }
             }
         },
+        autoheight: {
+            default_: JSINFO.plugin_codemirror.autoheight.toString(),
+            callback: function() {
+                destroyCodeMirror();
+                initCodeMirror();
+            }
+        },
+        usenativescroll: {
+            default_: JSINFO.plugin_codemirror.usenativescroll.toString(),
+            callback: function() {
+                destroyCodeMirror();
+                initCodeMirror();
+            }
+        },
     };
 
     var textarea = jQuery('#wiki__text');
@@ -376,6 +390,15 @@ jQuery(function() {
         cm.toTextArea();
         cm = null;
         window.DWsetSelection(selection);
+        jQuery('#codemirror__autoheight_style').remove();
+        // Re-show larger/smaller buttons that were
+        // hidden upon initialization.
+        jQuery('#size__ctl img').each(function() {
+            var img = jQuery(this);
+            if(img.attr('src').match(/\/(larger|smaller)\.gif$/)) {
+                img.show();
+            }
+        });
         textarea.focus();
     }
 
@@ -401,9 +424,29 @@ jQuery(function() {
         });
         cm.setOption(
             'scrollbarStyle',
-            JSINFO.plugin_codemirror.usenativescroll == 1 ? 'native' : 'overlay'
+            getSetting('usenativescroll') ==='1' ? 'native' : 'overlay'
         );
-        cm.setSize(null, textarea.css('height'));
+        if(getSetting('autoheight') === '1') {
+            if(jQuery('#codemirror__autoheight_style').length === 0) {
+                jQuery(
+                    '<style id="codemirror__autoheight_style">' +
+                    'form#dw__editform .CodeMirror, ' +
+                    '#dokuwiki__content .CodeMirror ' +
+                    '{ height: auto; }' +
+                    '</style>'
+                ).appendTo('head');
+            }
+            cm.setOption('viewportMargin', Infinity);
+            /* Hide editor resize buttons */
+            jQuery('#size__ctl img').each(function() {
+                var img = jQuery(this);
+                if(img.attr('src').match(/\/(larger|smaller)\.gif$/)) {
+                    img.hide();
+                }
+            });
+        } else {
+            cm.setSize(null, textarea.css('height'));
+        }
         cm.getDoc().on('change', function() {
             var now = new Date();
             if (now.getTime() - dw_locktimer.lasttime.getTime() > 30000) {
@@ -412,7 +455,11 @@ jQuery(function() {
             }
         });
         jQuery.each(settings, function(name, setting) {
-            if (name !== 'nativeeditor') {
+            if (
+                name !== 'nativeeditor' &&
+                name !== 'autoheight' &&
+                name !== 'usenativescroll'
+            ) {
                 var value = getSetting(name);
                 setting.callback(value);
             }
@@ -565,6 +612,8 @@ jQuery(function() {
             'keymap',
             'closebrackets',
             'linenumbers',
+            'autoheight',
+            'usenativescroll',
             'activeline',
             'matchbrackets',
             'syntax',
