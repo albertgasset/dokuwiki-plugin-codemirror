@@ -401,12 +401,10 @@ jQuery(function() {
         jQuery('#codemirror__autoheight_style').remove();
         // Re-show larger/smaller buttons that were
         // hidden upon initialization.
-        jQuery('#size__ctl img').each(function() {
-            var img = jQuery(this);
-            if(img.attr('src').match(/\/(larger|smaller)\.gif$/)) {
-                img.show();
-            }
-        });
+        jQuery(
+            '#size__ctl img[src$="/larger.gif"], ' +
+            '#size__ctl img[src$="/smaller.gif"]'
+        ).show();
         textarea.focus();
     }
 
@@ -446,12 +444,10 @@ jQuery(function() {
             }
             cm.setOption('viewportMargin', Infinity);
             /* Hide editor resize buttons */
-            jQuery('#size__ctl img').each(function() {
-                var img = jQuery(this);
-                if(img.attr('src').match(/\/(larger|smaller)\.gif$/)) {
-                    img.hide();
-                }
-            });
+            jQuery(
+                '#size__ctl img[src$="/larger.gif"], ' +
+                '#size__ctl img[src$="/smaller.gif"]'
+            ).hide();
         } else {
             cm.setSize(null, textarea.css('height'));
         }
