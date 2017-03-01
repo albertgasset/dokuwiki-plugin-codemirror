@@ -331,7 +331,8 @@ jQuery(function() {
             default_: JSINFO.plugin_codemirror.autoheight.toString(),
             noCookie: true,
             callback: function(value) {
-                var sel = 'form#dw__editform .CodeMirror, #dokuwiki__content .CodeMirror';
+                var sel = 'form#dw__editform .CodeMirror, ' +
+                    '#dokuwiki__content .CodeMirror';
                 if(value === '1') {
                     jQuery(sel).css({ height: 'auto' });
                     // Hide editor resize buttons
