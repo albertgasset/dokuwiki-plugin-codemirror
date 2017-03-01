@@ -748,10 +748,11 @@ jQuery(function() {
     }
 
     function setSetting(name, value) {
-        if(!settings[name].noCookie) {
+        var setting = settings[name];
+        if(!setting.noCookie) {
             DokuCookie.setValue('cm-' + name, value);
         }
-        settings[name].callback(value);
+        settings.callback(value);
     }
 
     function requireKeyMap(name, callback) {
