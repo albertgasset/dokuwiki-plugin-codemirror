@@ -243,6 +243,14 @@ jQuery(function() {
                     initCodeMirror();
                 } else if (cm && value === '1') {
                     destroyCodeMirror();
+                    // Re-show larger/smaller buttons that were
+                    // hidden upon initialization.
+                    if(getSetting('autoheight') === '1') {
+                        jQuery(
+                            '#size__ctl img[src$="/larger.gif"], ' +
+                            '#size__ctl img[src$="/smaller.gif"]'
+                        ).show();
+                    }
                 }
             }
         },
@@ -321,16 +329,24 @@ jQuery(function() {
         },
         autoheight: {
             default_: JSINFO.plugin_codemirror.autoheight.toString(),
-            callback: function() {
-                destroyCodeMirror();
-                initCodeMirror();
+            callback: function(value) {
+                var sel = 'form#dw__editform .CodeMirror, #dokuwiki__content .CodeMirror';
+                if(value === '1') {
+                    jQuery(sel).css({ height: 'auto' });
+                    // Hide editor resize buttons
+                    jQuery(
+                        '#size__ctl img[src$="/larger.gif"], ' +
+                        '#size__ctl img[src$="/smaller.gif"]'
+                    ).hide();
+                } else {
+                    jQuery(sel).removeAttr('style');
+                }
             }
         },
         usenativescroll: {
             default_: JSINFO.plugin_codemirror.usenativescroll.toString(),
             callback: function() {
-                destroyCodeMirror();
-                initCodeMirror();
+                // Do nothing; this is handled in initCodeMirror()
             }
         },
     };
@@ -398,13 +414,6 @@ jQuery(function() {
         cm.toTextArea();
         cm = null;
         window.DWsetSelection(selection);
-        jQuery('#codemirror__autoheight_style').remove();
-        // Re-show larger/smaller buttons that were
-        // hidden upon initialization.
-        jQuery(
-            '#size__ctl img[src$="/larger.gif"], ' +
-            '#size__ctl img[src$="/smaller.gif"]'
-        ).show();
         textarea.focus();
     }
 
@@ -432,25 +441,7 @@ jQuery(function() {
             'scrollbarStyle',
             getSetting('usenativescroll') ==='1' ? 'native' : 'overlay'
         );
-        if(getSetting('autoheight') === '1') {
-            if(jQuery('#codemirror__autoheight_style').length === 0) {
-                jQuery(
-                    '<style id="codemirror__autoheight_style">' +
-                    'form#dw__editform .CodeMirror, ' +
-                    '#dokuwiki__content .CodeMirror ' +
-                    '{ height: auto; }' +
-                    '</style>'
-                ).appendTo('head');
-            }
-            cm.setOption('viewportMargin', Infinity);
-            /* Hide editor resize buttons */
-            jQuery(
-                '#size__ctl img[src$="/larger.gif"], ' +
-                '#size__ctl img[src$="/smaller.gif"]'
-            ).hide();
-        } else {
-            cm.setSize(null, textarea.css('height'));
-        }
+        cm.setSize(null, textarea.css('height'));
         cm.getDoc().on('change', function() {
             var now = new Date();
             if (now.getTime() - dw_locktimer.lasttime.getTime() > 30000) {
@@ -459,11 +450,7 @@ jQuery(function() {
             }
         });
         jQuery.each(settings, function(name, setting) {
-            if (
-                name !== 'nativeeditor' &&
-                name !== 'autoheight' &&
-                name !== 'usenativescroll'
-            ) {
+            if (name !== 'nativeeditor') {
                 var value = getSetting(name);
                 setting.callback(value);
             }
