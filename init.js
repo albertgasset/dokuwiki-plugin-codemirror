@@ -329,6 +329,7 @@ jQuery(function() {
         },
         autoheight: {
             default_: JSINFO.plugin_codemirror.autoheight.toString(),
+            noCookie: true,
             callback: function(value) {
                 var sel = 'form#dw__editform .CodeMirror, #dokuwiki__content .CodeMirror';
                 if(value === '1') {
@@ -338,13 +339,15 @@ jQuery(function() {
                         '#size__ctl img[src$="/larger.gif"], ' +
                         '#size__ctl img[src$="/smaller.gif"]'
                     ).hide();
-                } else {
-                    jQuery(sel).removeAttr('style');
+                    if(cm) {
+                        cm.setOption('viewportMargin', Infinity);
+                    }
                 }
             }
         },
         usenativescroll: {
             default_: JSINFO.plugin_codemirror.usenativescroll.toString(),
+            noCookie: true,
             callback: function() {
                 // Do nothing; this is handled in initCodeMirror()
             }
@@ -603,8 +606,6 @@ jQuery(function() {
             'keymap',
             'closebrackets',
             'linenumbers',
-            'autoheight',
-            'usenativescroll',
             'activeline',
             'matchbrackets',
             'syntax',
@@ -721,8 +722,11 @@ jQuery(function() {
     }
 
     function getSetting(name) {
-        var value = DokuCookie.getValue('cm-' + name);
+        var value;
         var setting = settings[name];
+        if(!setting.noCookie) {
+            value = DokuCookie.getValue('cm-' + name);
+        }
 
         if (setting.choices) {
             // Choice setting
@@ -736,13 +740,17 @@ jQuery(function() {
             }
         }
 
-        DokuCookie.setValue('cm-' + name, value);
+        if(!setting.noCookie) {
+            DokuCookie.setValue('cm-' + name, value);
+        }
 
         return value;
     }
 
     function setSetting(name, value) {
-        DokuCookie.setValue('cm-' + name, value);
+        if(!settings[name].noCookie) {
+            DokuCookie.setValue('cm-' + name, value);
+        }
         settings[name].callback(value);
     }
 
