@@ -254,6 +254,14 @@ jQuery(function() {
                 }
             }
         },
+        showinvisibles: {
+            default_: '0',
+            callback: function(value) {
+                if (cm) {
+                    cm.setOption('showInvisibles', value === '1');
+                }
+            }
+        },
         theme: {
             default_: 'default',
             choices: [
@@ -617,6 +625,7 @@ jQuery(function() {
             'activeline',
             'matchbrackets',
             'syntax',
+            'showinvisibles',
             '-',
             'nativeeditor',
         ];
