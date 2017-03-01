@@ -752,7 +752,7 @@ jQuery(function() {
         if(!setting.noCookie) {
             DokuCookie.setValue('cm-' + name, value);
         }
-        settings.callback(value);
+        setting.callback(value);
     }
 
     function requireKeyMap(name, callback) {
