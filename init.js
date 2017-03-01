@@ -349,7 +349,10 @@ jQuery(function() {
             default_: JSINFO.plugin_codemirror.usenativescroll.toString(),
             noCookie: true,
             callback: function() {
-                // Do nothing; this is handled in initCodeMirror()
+                cm.setOption(
+                    'scrollbarStyle',
+                    getSetting('usenativescroll') ==='1' ? 'native' : 'overlay'
+                );
             }
         },
     };
@@ -440,10 +443,6 @@ jQuery(function() {
                 jQuery('#edbtn__save').click();
             },
         });
-        cm.setOption(
-            'scrollbarStyle',
-            getSetting('usenativescroll') ==='1' ? 'native' : 'overlay'
-        );
         cm.setSize(null, textarea.css('height'));
         cm.getDoc().on('change', function() {
             var now = new Date();
