@@ -8,3 +8,4 @@
  
 $lang['nativeeditor']          = 'Nativen DokuWiki Editor als Standard verwenden';
 $lang['codesyntax']            = 'Verwende CodeMirror um die Syntax hervorzuheben wenn du Seiten betrachtest.';
+$lang['usenativescroll']       = 'Nativen Scrollbar-Stil statt Standard Overlay Stil verwenden';
