@@ -243,14 +243,6 @@ jQuery(function() {
                     initCodeMirror();
                 } else if (cm && value === '1') {
                     destroyCodeMirror();
-                    // Re-show larger/smaller buttons that were
-                    // hidden upon initialization.
-                    if(getSetting('autoheight') === '1') {
-                        jQuery(
-                            '#size__ctl img[src$="/larger.gif"], ' +
-                            '#size__ctl img[src$="/smaller.gif"]'
-                        ).show();
-                    }
                 }
             }
         },
@@ -327,34 +319,6 @@ jQuery(function() {
                 }
             }
         },
-        autoheight: {
-            default_: JSINFO.plugin_codemirror.autoheight.toString(),
-            noCookie: true,
-            callback: function(value) {
-                var sel = 'form#dw__editform .CodeMirror';
-                if(value === '1') {
-                    jQuery(sel).css({ height: 'auto' });
-                    // Hide editor resize buttons
-                    jQuery(
-                        '#size__ctl img[src$="/larger.gif"], ' +
-                        '#size__ctl img[src$="/smaller.gif"]'
-                    ).hide();
-                    if(cm) {
-                        cm.setOption('viewportMargin', Infinity);
-                    }
-                }
-            }
-        },
-        usenativescroll: {
-            default_: JSINFO.plugin_codemirror.usenativescroll.toString(),
-            noCookie: true,
-            callback: function() {
-                cm.setOption(
-                    'scrollbarStyle',
-                    getSetting('usenativescroll') ==='1' ? 'native' : 'overlay'
-                );
-            }
-        },
     };
 
     var textarea = jQuery('#wiki__text');
@@ -421,6 +385,13 @@ jQuery(function() {
         cm = null;
         window.DWsetSelection(selection);
         textarea.focus();
+
+        if(JSINFO.plugin_codemirror.autoheight.toString() === '1') {
+            jQuery(
+                '#size__ctl img[src$="/larger.gif"], ' +
+                '#size__ctl img[src$="/smaller.gif"]'
+            ).show();
+        }
     }
 
     function initCodeMirror() {
@@ -443,6 +414,11 @@ jQuery(function() {
                 jQuery('#edbtn__save').click();
             },
         });
+        cm.setOption(
+            'scrollbarStyle',
+            JSINFO.plugin_codemirror.usenativescroll.toString() === '1' ?
+                'native' : 'overlay'
+        );
         cm.setSize(null, textarea.css('height'));
         cm.getDoc().on('change', function() {
             var now = new Date();
@@ -458,6 +434,17 @@ jQuery(function() {
             }
         });
         window.DWsetSelection(selection);
+
+        if(JSINFO.plugin_codemirror.autoheight.toString() === '1') {
+            jQuery('form#dw__editform .CodeMirror').css({ height: 'auto' });
+            jQuery(
+                '#size__ctl img[src$="/larger.gif"], ' +
+                '#size__ctl img[src$="/smaller.gif"]'
+            ).hide();
+            // Tell CodeMirror to render ALL lines of text.
+            // Needed when no lines get scrolled out of the CodeMirror frame.
+            cm.setOption('viewportMargin', Infinity);
+        }
     }
 
     function initMode() {
@@ -721,11 +708,8 @@ jQuery(function() {
     }
 
     function getSetting(name) {
-        var value;
+        var value = DokuCookie.getValue('cm-' + name);
         var setting = settings[name];
-        if(!setting.noCookie) {
-            value = DokuCookie.getValue('cm-' + name);
-        }
 
         if (setting.choices) {
             // Choice setting
@@ -739,19 +723,14 @@ jQuery(function() {
             }
         }
 
-        if(!setting.noCookie) {
-            DokuCookie.setValue('cm-' + name, value);
-        }
+        DokuCookie.setValue('cm-' + name, value);
 
         return value;
     }
 
     function setSetting(name, value) {
-        var setting = settings[name];
-        if(!setting.noCookie) {
-            DokuCookie.setValue('cm-' + name, value);
-        }
-        setting.callback(value);
+        DokuCookie.setValue('cm-' + name, value);
+        settings[name].callback(value);
     }
 
     function requireKeyMap(name, callback) {
