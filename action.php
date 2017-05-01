@@ -48,6 +48,7 @@ class action_plugin_codemirror extends DokuWiki_Action_Plugin {
             'smileys' => array_keys(getSmileys()),
             'version' => $version,
             'usenativescroll' => $this->getConf('usenativescroll'),
+            'autoheight' => $this->getConf('autoheight'),
         );
 
         $event->data['link'][] = array(

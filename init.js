@@ -385,6 +385,13 @@ jQuery(function() {
         cm = null;
         window.DWsetSelection(selection);
         textarea.focus();
+
+        if(JSINFO.plugin_codemirror.autoheight.toString() === '1') {
+            jQuery(
+                '#size__ctl img[src$="/larger.gif"], ' +
+                '#size__ctl img[src$="/smaller.gif"]'
+            ).show();
+        }
     }
 
     function initCodeMirror() {
@@ -409,7 +416,8 @@ jQuery(function() {
         });
         cm.setOption(
             'scrollbarStyle',
-            JSINFO.plugin_codemirror.usenativescroll == 1 ? 'native' : 'overlay'
+            JSINFO.plugin_codemirror.usenativescroll.toString() === '1' ?
+                'native' : 'overlay'
         );
         cm.setSize(null, textarea.css('height'));
         cm.getDoc().on('change', function() {
@@ -426,6 +434,17 @@ jQuery(function() {
             }
         });
         window.DWsetSelection(selection);
+
+        if(JSINFO.plugin_codemirror.autoheight.toString() === '1') {
+            jQuery('form#dw__editform .CodeMirror').css({ height: 'auto' });
+            jQuery(
+                '#size__ctl img[src$="/larger.gif"], ' +
+                '#size__ctl img[src$="/smaller.gif"]'
+            ).hide();
+            // Tell CodeMirror to render ALL lines of text.
+            // Needed when no lines get scrolled out of the CodeMirror frame.
+            cm.setOption('viewportMargin', Infinity);
+        }
     }
 
     function initMode() {
